@@ -1,0 +1,49 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+}
+
+.Header-style-1 {
+  background-color: #ffffff;
+  height: 100%;
+  width: 70%;
+  border: 2px solid;
+  border-color: #666666;
+  border-radius: 12px;
+}
+
+.sign-in {
+  align-items: center;
+
+}
+
+.link-style {
+  color: '#333';
+  text-decoration: 'none';
+  font-weight: bold;
+  font-size: 50px;
+}
+
+.link-style active {
+  text-decoration: 'none';
+  color: #ffffff;
+}
+
+
+
+.App-header {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #09d3ac;
+}
