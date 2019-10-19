@@ -7,7 +7,6 @@ export default function Home() {
   useEffect(() => {
     axios.get('http://localhost:5000/api/items').then(res => setData(res.data))
   }, [])
-
     return (
         <div>
           {data && data.map(item => (
