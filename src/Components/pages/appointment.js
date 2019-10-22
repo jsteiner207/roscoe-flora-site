@@ -34,6 +34,11 @@ export default class Form extends React.Component {
       .post(`http://localhost:5000/api/items`, data)
       .then(res => { console.log(res); console.log(res.data)})
       .catch(err => console.log(err));
+    
+    axios
+      .post(`http://localhost:5000/email`, {email_name:this.state.email})
+      .then(res => { console.log(res); console.log(res.data)})
+      .catch(err => {console.log(err)});
   
     console.log(this.state);
     this.setState({
