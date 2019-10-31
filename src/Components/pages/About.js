@@ -2,20 +2,29 @@ import React from 'react'
 
 export default function About() {
     return (
-        <div>
-            <h3 style={linkstyle}>roscoe flora is a photography company that makes a statement, without ever sayin' a word...</h3>
-            <li>fasdf</li>
-            <li>fasdf</li>
-            <li>fasdf</li>
-            <li>fasdf</li>
+       
+
+
+    
+        <div style={linkstyle}>
+
+            
+                <p>Roscoe Flora is a photography company based in St. Louis, Missouri company that was founded in 2015 by Mikey Zamacona.</p>
+                
+                <p>Mikey Graduated from the Art Institute of St. Louis in 2015. After that he interned at Alive Magazine where some of his work was published in their magazine.</p>
+            
         </div>
-    )
+    );
 }
-
-
-
 
 const linkstyle = {
     color: '#333',
-    textDecoration: 'none'
-}
+    
+    textDecoration: 'none'}
+        
+    
+
+
+
+
+
