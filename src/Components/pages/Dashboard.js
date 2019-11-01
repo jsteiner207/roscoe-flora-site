@@ -98,6 +98,9 @@ export default function Dashboard() {
               </CardActions>
             </Card>
           </div>
+          <p>
+             hello puppet
+          </p>
         ))}
     </div>
   );
