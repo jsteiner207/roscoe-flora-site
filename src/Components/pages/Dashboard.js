@@ -97,7 +97,6 @@ export default function Dashboard() {
                 </IconButton>
               </CardActions>
             </Card>
-            ...
           </div>
         ))}
     </div>
