@@ -100,17 +100,6 @@ export default function Dashboard() {
             ...
           </div>
         ))}
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{"Remove this appointment?"}</DialogTitle>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleClose} color="secondary" autoFocus>
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
     </div>
   );
 }
