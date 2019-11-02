@@ -13,6 +13,8 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import axios from "axios";
 
+import AppointmentDialog from "./dashboardComponents/appointmentDialog";
+
 const useStyles = makeStyles({
   Card: {
     backgroundColor: "lightgray",
@@ -92,24 +94,14 @@ export default function Dashboard() {
                 <IconButton className={classes.right}>
                   <EditIcon />
                 </IconButton>
-                <IconButton onClick={() => handleClickOpen()}>
+                <IconButton onClick={handleClickOpen}>
                   <DeleteIcon />
                 </IconButton>
               </CardActions>
             </Card>
           </div>
         ))}
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{"Remove this appointment?"}</DialogTitle>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleClose} color="secondary" autoFocus>
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <AppointmentDialog open={open} handleClose={handleClose} />
     </div>
   );
 }

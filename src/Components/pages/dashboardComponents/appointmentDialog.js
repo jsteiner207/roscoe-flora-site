@@ -4,7 +4,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
 
-export default function Dialogs() {
+export default function AppointmentDialog(props) {
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -12,15 +12,16 @@ export default function Dialogs() {
   const handleClose = () => {
     setOpen(false);
   };
+
   return (
     <div>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={props.open} onClose={props.handleClose}>
         <DialogTitle>{"Remove this appointment?"}</DialogTitle>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={props.handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleClose} color="secondary" autoFocus>
+          <Button onClick={props.handleClose} color="secondary" autoFocus>
             OK
           </Button>
         </DialogActions>
