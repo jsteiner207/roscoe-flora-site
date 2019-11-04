@@ -25,7 +25,7 @@ export default function Portfolio () {
 	<div data-src="https://i.imgur.com/iLJbh7E.png" />
 		</AutoplaySlider>	)
 				
-return (<div><h1>Headshots</h1>  </div>, slider ) 
+return (<React.Fragment><h1>Headshots</h1> {slider} </React.Fragment>  ) 
 //   <AwesomeSlider cssModule={AwesomeSliderStyles}
 //    >
 //     <div data-src="https://i.imgur.com/IHu4dkl.png" />
