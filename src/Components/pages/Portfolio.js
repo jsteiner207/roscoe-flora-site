@@ -1,25 +1,45 @@
 import React from 'react'
 import AwesomeSlider from 'react-awesome-slider';
+import withAutoplay from 'react-awesome-slider/dist/autoplay';
 import 'react-awesome-slider/dist/styles.css';
-import AwesomeSliderStyles from 'react-awesome-slider/src/styled/fold-out-animation';
 
 
+	
 
-
-export default function Portfolio() {
-    return (
+export default function Portfolio () {
+   
        
-		
-				 
-  <AwesomeSlider cssModule={AwesomeSliderStyles}>
-       <div data-src="https://i.imgur.com/IHu4dkl.png" />
+	const AutoplaySlider = withAutoplay(AwesomeSlider);
+		const slider = (
+		  <AutoplaySlider
+			play={true}
+			cancelOnInteraction={false} // should stop playing on user interaction
+			interval={6000}
+			infinite = {true}
+		  >
+	<div data-src="https://i.imgur.com/IHu4dkl.png" />
     <div data-src="https://i.imgur.com/qkCCZN2.png" />
     <div data-src="https://i.imgur.com/NQIT1JH.png" />
     <div data-src="https://i.imgur.com/nUbzYZO.png" />
 	<div data-src="https://i.imgur.com/nO8j7cI.png" />
 	<div data-src="https://i.imgur.com/iLJbh7E.png" />
-  </AwesomeSlider>
-);
+		</AutoplaySlider>	)
+				
+return (<div><h1>Headshots</h1>  </div>, slider ) 
+//   <AwesomeSlider cssModule={AwesomeSliderStyles}
+//    >
+//     <div data-src="https://i.imgur.com/IHu4dkl.png" />
+//     <div data-src="https://i.imgur.com/qkCCZN2.png" />
+//     <div data-src="https://i.imgur.com/NQIT1JH.png" />
+//     <div data-src="https://i.imgur.com/nUbzYZO.png" />
+// 	<div data-src="https://i.imgur.com/nO8j7cI.png" />
+// 	<div data-src="https://i.imgur.com/iLJbh7E.png" />
+//   </AwesomeSlider>
+
+			
+
+
+
 		
 		  
 		 
