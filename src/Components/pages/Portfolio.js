@@ -3,56 +3,41 @@ import { Gallery, GalleryImage } from "react-photo-gallery";
 //import { photos } from "\Photos.js";
 import PhotoGrid from "react-photo-feed";
 import "react-photo-feed/library/style.css";
+//import photos from './photos.js'
 const demoPhotos = [
 	{
-		id : 1, src : "https://farm5.staticflickr.com/4077/34824083444_f5f050e31c_n.jpg",
-		bigSrc : "https://farm5.staticflickr.com/4077/34824083444_f5f050e31c_b.jpg"
+		id : 1, src : "https://i.imgur.com/IHu4dkl.png",
+		bigSrc : "https://i.imgur.com/IHu4dkl.png"
 	},
 	{
-		id : 2, src : "https://farm5.staticflickr.com/4240/35527849422_25a0a67df6_n.jpg",
-		bigSrc : "https://farm5.staticflickr.com/4240/35527849422_25a0a67df6_b.jpg"
+		id : 2, src : "https://i.imgur.com/qkCCZN2.png",
+		bigSrc : "https://i.imgur.com/qkCCZN2.png"
 	},
 	{
-		id : 3, src : "https://farm5.staticflickr.com/4077/34824083444_f5f050e31c_n.jpg",
-		bigSrc : "https://farm5.staticflickr.com/4077/34824083444_f5f050e31c_b.jpg"
+		id : 3, src : "https://i.imgur.com/NQIT1JH.png",
+		bigSrc : "https://i.imgur.com/NQIT1JH.png"
 	},
 	{
-		id : 4, src : "https://farm5.staticflickr.com/4240/35527849422_25a0a67df6_n.jpg",
-		bigSrc : "https://farm5.staticflickr.com/4240/35527849422_25a0a67df6_b.jpg"
+		id : 4, src : "https://i.imgur.com/nUbzYZO.png",
+		bigSrc : "https://i.imgur.com/nUbzYZO.png"
 	},
 	{
-		id : 5, src : "https://farm5.staticflickr.com/4077/34824083444_f5f050e31c_n.jpg",
-		bigSrc : "https://farm5.staticflickr.com/4077/34824083444_f5f050e31c_b.jpg"
+		id : 5, src : "https://i.imgur.com/nO8j7cI.png",
+		bigSrc : "https://i.imgur.com/nO8j7cI.png"
 	},
 	{
-		id : 6, src : "https://farm5.staticflickr.com/4240/35527849422_25a0a67df6_n.jpg",
-		bigSrc : "https://farm5.staticflickr.com/4240/35527849422_25a0a67df6_b.jpg"
-	},
-	{
-		id : 7, src : "https://farm5.staticflickr.com/4077/34824083444_f5f050e31c_n.jpg",
-		bigSrc : "https://farm5.staticflickr.com/4077/34824083444_f5f050e31c_b.jpg"
+		id : 6, src : "https://i.imgur.com/iLJbh7E.png",
+		bigSrc : "https://i.imgur.com/iLJbh7E.png"
 	}
+	
 ]
 export default function Portfolio() {
     return (
-        <div>
-<<<<<<< Updated upstream
-            <h2 style={linkstyle}>Portfolio is under deat</h2>
-            <script type="text/javascript">
-    var feed = new Instafeed(
-        get: 'popular',
-        
-        clientId: '10420343974',
-        template: '<a class="animation" href="{{link}}"><img src="{{image}}" /></a>'
-    });
-    feed.run();
-</script>
+       <div>
 <script type="text/javascript" src="path/to/instafeed.min.js"></script>
-=======
             <h2 style={linkstyle}>Portfolio is under constructoin</h2>
             
             <PhotoGrid columns={3} photos={demoPhotos} />
->>>>>>> Stashed changes
         </div>
     )
 }
