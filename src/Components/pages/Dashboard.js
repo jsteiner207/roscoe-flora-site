@@ -60,33 +60,26 @@ export default function Dashboard() {
     location: ""
   };
 
-  const [open, setOpen] = React.useState(false);
-  const [editOpen, setEditOpen] = React.useState(false);
+  const [Delete, setDelete] = React.useState(false);
+  const [edit, setEdit] = React.useState(false);
   const [data, setData] = useState(null);
   const [appointment, setAppointment] = React.useState(def);
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleClickDelete = () => {
+    setDelete(true);
   };
   const handleClose = () => {
-    setOpen(false);
+    setDelete(false);
+    setEdit(false);
   };
 
-  const editHandleClickOpen = item => {
+  const editHandleClick = item => {
     setAppointment(item);
-    console.log(appointment);
-    setEditOpen(true);
+    console.log(item.first_name);
+    setEdit(true);
   };
-  const editHandleClose = () => {
-    setEditOpen(false);
-  };
-  const classes = useStyles();
 
-  const change = e => {
-    setAppointment({
-      [e.target.name]: e.target.value
-    });
-  };
+  const classes = useStyles();
 
   useEffect(() => {
     axios
@@ -124,23 +117,22 @@ export default function Dashboard() {
                 <Button size="small">Learn More</Button>
                 <IconButton
                   className={classes.right}
-                  onClick={() => editHandleClickOpen(item)}
+                  onClick={() => editHandleClick(item)}
                 >
                   <EditIcon />
                 </IconButton>
-                <IconButton onClick={handleClickOpen}>
+                <IconButton onClick={handleClickDelete}>
                   <DeleteIcon />
                 </IconButton>
               </CardActions>
             </Card>
           </div>
         ))}
-      <AppointmentDialog open={open} handleClose={handleClose} />
+      <AppointmentDialog open={Delete} handleClose={handleClose} />
       <EditAppointment
-        open={editOpen}
-        handleClose={editHandleClose}
+        open={edit}
+        handleClose={handleClose}
         appointment={appointment}
-        _change={change}
       />
       {/* <AddAppointment /> */}
     </div>

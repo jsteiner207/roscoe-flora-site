@@ -10,15 +10,32 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import UpdateSnack from "./updatesnack";
 
+import DateFnsUtils from "@date-io/date-fns";
+
+import {
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+  KeyboardDatePicker
+} from "@material-ui/pickers";
+
 export default function FormDialog(props) {
   const [open, setOpen] = React.useState(false);
+  const [firt, setFirst] = React.useState("john"); //props.appointment.first_name);
+  const [selectedDate, setSelectedDate] = React.useState(
+    new Date("2014-08-18T21:11:54")
+  );
 
-  //const [appointment, setAppointment] = React.useState(props.appointment);
+  const handleDateChange = date => {
+    setSelectedDate(date);
+  };
+
+  const handleFirstChange = e => {
+    console.log(firt);
+  };
   const handleClickOpen = () => {
     props.handleClose();
     setOpen(true);
   };
-
   const handleClose = () => {
     setOpen(false);
   };
@@ -39,7 +56,11 @@ export default function FormDialog(props) {
 
   return (
     <div>
-      <Dialog open={props.open} onClose={props.HandleClose}>
+      <Dialog
+        open={props.open}
+        onClose={props.HandleClose}
+        appointment={props.appointment}
+      >
         <DialogTitle id="form-dialog-title">Edit Appointment Info</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -53,8 +74,8 @@ export default function FormDialog(props) {
               className={classes.textField}
               label="First Name"
               margin="normal"
-              value={props.appointment.first_name}
-              //onChange={e => props._change(e)}
+              defaultValue={props.appointment.first_name}
+              onChange={handleFirstChange}
             />
             <TextField
               id="filled-basic"
@@ -98,6 +119,32 @@ export default function FormDialog(props) {
               margin="normal"
               value={props.appointment.outfit_changes}
             />
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                disableToolbar
+                variant="inline"
+                format="MM/dd/yyyy"
+                margin="normal"
+                id="date-picker-inline"
+                label="Date picker inline"
+                value={selectedDate}
+                onChange={handleDateChange}
+                KeyboardButtonProps={{
+                  "aria-label": "change date"
+                }}
+              />
+
+              <KeyboardTimePicker
+                margin="normal"
+                id="time-picker"
+                label="Time picker"
+                value={selectedDate}
+                onChange={handleDateChange}
+                KeyboardButtonProps={{
+                  "aria-label": "change time"
+                }}
+              />
+            </MuiPickersUtilsProvider>
           </form>
         </DialogContent>
         <DialogActions>
