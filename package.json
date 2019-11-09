@@ -9,10 +9,15 @@
     "@material-ui/pickers": "^3.2.7",
     "axios": "^0.19.0",
     "bootstrap": "^4.3.1",
+<<<<<<< HEAD
     "date-fns": "^2.6.0",
     "material-ui": "^1.0.0-beta.47",
     "material-ui-pickers": "^2.2.4",
+=======
+    "node-sass": "^4.13.0",
+>>>>>>> 73b79f9a99101f361bd34424f0a6334f7ce1187d
     "react": "^16.9.0",
+    "react-awesome-slider": "^2.1.2",
     "react-dom": "^16.9.0",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.1.2",
