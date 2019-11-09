@@ -16,6 +16,8 @@ export class Success extends Component {
   };
 
   render() {
+    const { values, handleChange } = this.props;
+    const { classes } = this.props;
     return (
       <MuiThemeProvider>
         <React.Fragment>

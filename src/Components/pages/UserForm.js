@@ -39,13 +39,16 @@ export default class UserForm extends Component {
     price: 0,
     updating: false,
     Appid: "",
-    outfitChanges: "",
-    loc: "",
+    service: "",
+    changes: "",
+    location: "",
+    address: "",
     photoType: "",
     firstName: "",
     lastName: "",
     email: "",
-    phone: ""
+    phone: "",
+    specrec: ""
   };
 
   // Proceed to next step
@@ -79,8 +82,28 @@ export default class UserForm extends Component {
 
   render() {
     const { step } = this.state;
-    const { firstName, lastName, email, phone } = this.state;
-    const values = { firstName, lastName, email, phone };
+    const {
+      firstName,
+      lastName,
+      email,
+      phone,
+      service,
+      specrec,
+      changes,
+      address,
+      location
+    } = this.state;
+    const values = {
+      firstName,
+      lastName,
+      email,
+      phone,
+      service,
+      specrec,
+      changes,
+      address,
+      location
+    };
 
     switch (step) {
       case 1:
@@ -94,6 +117,7 @@ export default class UserForm extends Component {
           </MuiThemeProvider>
         );
       case 2:
+        console.log(this.state);
         return (
           <MuiThemeProvider theme={this.theme}>
             <FormPersonalDetails
@@ -105,12 +129,15 @@ export default class UserForm extends Component {
           </MuiThemeProvider>
         );
       case 3:
+        console.log(this.state);
         return (
-          <Confirm
-            nextStep={this.nextStep}
-            prevStep={this.prevStep}
-            values={values}
-          />
+          <MuiThemeProvider theme={this.theme}>
+            <Confirm
+              nextStep={this.nextStep}
+              prevStep={this.prevStep}
+              values={values}
+            />
+          </MuiThemeProvider>
         );
       case 4:
         return <Success />;

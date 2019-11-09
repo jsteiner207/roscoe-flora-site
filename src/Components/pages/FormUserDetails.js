@@ -43,7 +43,6 @@ class FormUserDetails extends Component {
   render() {
     const { classes } = this.props;
     const { values, handleChange } = this.props;
-    console.log(this.props.classes);
     return (
       <div>
         <Grid className={classes.Grid} container spacing={1}>
@@ -74,8 +73,8 @@ class FormUserDetails extends Component {
           </Grid>
           <Grid item xs={6}>
             <TextField
-              label="Email"
-              onChange={handleChange("email")}
+              label="Phone Number"
+              onChange={handleChange("phone")}
               defaultValue={values.email}
               margin="normal"
             />
