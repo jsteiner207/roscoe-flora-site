@@ -48,7 +48,18 @@ export default class UserForm extends Component {
     lastName: "",
     email: "",
     phone: "",
-    specrec: ""
+    specrec: "",
+    appDate: new Date("2014-08-18T21:11:54")
+  };
+
+  handleDateChange = date => {
+    try {
+      date.setMinutes("00");
+      this.setState({ appDate: date });
+      console.log(this.state.appDate);
+    } catch {
+      console.log("d");
+    }
   };
 
   // Proceed to next step
@@ -91,7 +102,8 @@ export default class UserForm extends Component {
       specrec,
       changes,
       address,
-      location
+      location,
+      appDate
     } = this.state;
     const values = {
       firstName,
@@ -102,7 +114,8 @@ export default class UserForm extends Component {
       specrec,
       changes,
       address,
-      location
+      location,
+      appDate
     };
 
     switch (step) {
@@ -111,6 +124,7 @@ export default class UserForm extends Component {
           <MuiThemeProvider theme={this.theme}>
             <FormUserDetails
               nextStep={this.nextStep}
+              handleDateChange={this.handleDateChange}
               handleChange={this.handleChange}
               values={values}
             />

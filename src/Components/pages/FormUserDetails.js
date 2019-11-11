@@ -28,12 +28,6 @@ const styles = {
   }
 };
 
-var selectedDate = new Date("2014-08-18T21:11:54");
-
-const handleDateChange = date => {
-  selectedDate = date;
-};
-
 class FormUserDetails extends Component {
   continue = e => {
     e.preventDefault();
@@ -42,7 +36,7 @@ class FormUserDetails extends Component {
 
   render() {
     const { classes } = this.props;
-    const { values, handleChange } = this.props;
+    const { values, handleChange, handleDateChange } = this.props;
     return (
       <div>
         <Grid className={classes.Grid} container spacing={1}>
@@ -89,7 +83,7 @@ class FormUserDetails extends Component {
                 margin="normal"
                 id="date-picker-inline"
                 label="Date picker inline"
-                value={this.selectedDate}
+                value={values.appDate}
                 onChange={handleDateChange}
               />
             </Grid>
@@ -99,7 +93,7 @@ class FormUserDetails extends Component {
                 margin="normal"
                 id="time-picker"
                 label="Time picker"
-                value={selectedDate}
+                value={values.appDate}
                 onChange={handleDateChange}
                 KeyboardButtonProps={{
                   "aria-label": "change time"

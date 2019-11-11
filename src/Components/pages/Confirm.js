@@ -56,7 +56,10 @@ class Confirm extends Component {
                 <ListItemText primary="Service" secondary={values.service} />
               </ListItem>
               <ListItem>
-                <ListItemText primary="Appointment Date" secondary="11/29" />
+                <ListItemText
+                  primary="Appointment Date"
+                  secondary={values.appDate.toLocaleDateString("en-US")}
+                />
               </ListItem>
               <ListItem>
                 <ListItemText
@@ -92,7 +95,13 @@ class Confirm extends Component {
               </ListItem>
 
               <ListItem>
-                <ListItemText primary="Appointment Time" secondary="12:00" />
+                <ListItemText
+                  primary="Appointment Time"
+                  secondary={values.appDate.toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit"
+                  })}
+                />
               </ListItem>
               <ListItem>
                 <ListItemText
