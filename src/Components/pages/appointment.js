@@ -1,251 +1,220 @@
-import React from "react";
-import axios from "axios";
+// import React from "react";
 
-export default class Form extends React.Component {
-  state = {
-    price: 0,
-    updating: false,
-    Appid: "",
-    outfitChanges: "",
-    loc: "",
-    photoType: "",
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: ""
-  };
+// export default class Form extends React.Component {
+//   state = {
+//     price: 0,
+//     updating: false,
+//     Appid: "",
+//     outfitChanges: "",
+//     loc: "",
+//     photoType: "",
+//     firstName: "",
+//     lastName: "",
+//     email: "",
+//     phone: ""
+//   };
 
-  // This generates an appointment id for the customer
-  generateKey = length => {
-    let appId = "";
-    let possible = "abcdefghijklmnopqrstuvwxyz0123456789";
-    for (let i = 0; i < length; i++) {
-      appId += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-    return appId;
-  };
+//   onRetrieve = () => {
+//     console.log(this.state.Appid);
+//     axios
+//       .get(
+//         `https://vast-wave-57983.herokuapp.com/api/items/${this.state.Appid}`
+//       )
+//       .then(res => {
+//         console.log(res.data);
+//         this.setState({
+//           outfitChanges: res.data.outfit_changes,
+//           loc: res.data.location,
+//           photoType: res.data.photoshoot_type,
+//           firstName: res.data.first_name,
+//           lastName: res.data.last_name,
+//           email: res.data.email_name,
+//           phone: res.data.phone_number,
+//           updating: true
+//         });
+//       });
+//   };
 
-  // used to update the state of the form elements
-  change = e => {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
-  };
+//   onSubmit = () => {
+//     let data = {
+//       first_name: this.state.firstName,
+//       last_name: this.state.lastName,
+//       email_name: this.state.email,
+//       phone_number: this.state.phone,
+//       outfit_changes: this.state.outfitChanges,
+//       photoshoot_type: this.state.photoType,
+//       location: this.state.loc,
+//       appointment_id: this.state.updating
+//         ? this.state.Appid
+//         : this.generateKey(6) //if updating, use default appid. otherwise, make one
+//     };
 
-  updatePrice = () => {
-    let est = this.state.price;
-    //let changes = this.state.outfitChanges;
-    if (this.state.loc === "Studio") est = 100;
-    else est = 200;
-    try {
-      est += parseInt(est, 10) * 40;
-    } catch {
-      console.log("shit");
-    }
-    this.setState({ price: est });
-  };
+//     if (this.state.updating === true) {
+//       axios.put(
+//         `https://vast-wave-57983.herokuapp.com/api/items/${this.state.Appid}`,
+//         data
+//       );
+//     } else {
+//       // stores the form data in the database
+//       axios
+//         .post(`https://vast-wave-57983.herokuapp.com/api/items`, data)
+//         .then(res => {
+//           console.log(res);
+//           console.log(res.data);
+//         })
+//         .catch(err => console.log(err));
 
-  onRetrieve = () => {
-    console.log(this.state.Appid);
-    axios
-      .get(
-        `https://vast-wave-57983.herokuapp.com/api/items/${this.state.Appid}`
-      )
-      .then(res => {
-        console.log(res.data);
-        this.setState({
-          outfitChanges: res.data.outfit_changes,
-          loc: res.data.location,
-          photoType: res.data.photoshoot_type,
-          firstName: res.data.first_name,
-          lastName: res.data.last_name,
-          email: res.data.email_name,
-          phone: res.data.phone_number,
-          updating: true
-        });
-      });
-  };
+//       axios
+//         .post(`https://vast-wave-57983.herokuapp.com/email`, data)
+//         .then(res => {
+//           console.log(res);
+//           console.log(res.data);
+//         })
+//         .catch(err => {
+//           console.log(err);
+//         });
+//     }
 
-  onSubmit = () => {
-    let data = {
-      first_name: this.state.firstName,
-      last_name: this.state.lastName,
-      email_name: this.state.email,
-      phone_number: this.state.phone,
-      outfit_changes: this.state.outfitChanges,
-      photoshoot_type: this.state.photoType,
-      location: this.state.loc,
-      appointment_id: this.state.updating
-        ? this.state.Appid
-        : this.generateKey(6) //if updating, use default appid. otherwise, make one
-    };
+//     this.setState({
+//       updhttp://localhost:5000
+//       firstName: "",
+//       lastName: "",
+//       email: "",
+//       phone: ""
+//     });
+//   };http://localhost:5000
 
-    if (this.state.updating === true) {
-      axios.put(
-        `https://vast-wave-57983.herokuapp.com/api/items/${this.state.Appid}`,
-        data
-      );
-    } else {
-      // stores the form data in the database
-      axios
-        .post(`https://vast-wave-57983.herokuapp.com/api/items`, data)
-        .then(res => {
-          console.log(res);
-          console.log(res.data);
-        })
-        .catch(err => console.log(err));
+//   render() {
+//     return (
+//       <div>
+//         3+
+//         <form style={linkstyle}>
+//           <label>
+//             apphttp://localhost:5000
+//             <input
+//               name="Appid"
+//               value={this.state.Appid}
+//               onChange={e => this.change(e)}
+//             />
+//           </label>
+//         </form>
+//         <button onClick={() => this.onRetrieve()}>retrieve</button>
+//         <form style={linkstyle}>
+//           <p>Where would you like pictures taken?</p>
+//           <input
+//             type="radio"
+//             name="loc"
+//             value="Studio"
+//             onChange={e => this.change(e)}
+//           />{" "}
+//           In-studio <br />
+//           <input
+//             type="radio"
+//             name="loc"
+//             value="location"
+//             onChange={e => this.change(e)}
+//           />{" "}
+//           Location <br />
+//           <p>What type of photoshoot are you interested in</p>
+//           <input
+//             type="radio"
+//             name="photoType"
+//             value="Headshot"
+//             onChange={e => this.change(e)}
+//           />{" "}
+//           Headshot
+//           <br />
+//           <input
+//             type="radio"
+//             name="photoType"
+//             value="Portraiture"
+//             onChange={e => this.change(e)}
+//           />{" "}
+//           Portraiture
+//           <br />
+//           <input
+//             type="radio"
+//             name="photoType"
+//             value="fashion"
+//             onChange={e => this.change(e)}
+//           />{" "}
+//           Fashion
+//           <br />
+//           <p>how many outfit changes would you need</p>
+//           <input
+//             list="numchanges"
+//             name="outfitChanges"
+//             onChange={e => this.change(e)}
+//           />
+//           <datalist id="numchanges">
+//             <option value="0" />
+//             <option value="1" />
+//             <option value="2" />
+//             <option value="3" />
+//             <option value="4" />
+//           </datalist>
+//           <p /> <bt />
+//           <label>Price: {this.state.price}</label>
+//         </form>
+//         <form style={linkstyle}>
+//           <label>
+//             {" "}
+//             First name:
+//             <input
+//               name="firstName"
+//               placeholder="first name"
+//               value={this.state.firstName}
+//               onChange={e => this.change(e)}
+//             />
+//           </label>
+//           <label>
+//             Last name:
+//             <input
+//               name="lastName"
+//               placeholder="last name"
+//               value={this.state.lastName}
+//               onChange={e => this.change(e)}
+//             />
+//           </label>
+//         </form>
+//         <form style={linkstyle}>
+//           <label>
+//             {" "}
+//             email:
+//             <input
+//               name="email"
+//               placeholder="email"
+//               value={this.state.email}
+//               onChange={e => this.change(e)}
+//             />
+//           </label>
+//           <label>
+//             {" "}
+//             Phone number:
+//             <input
+//               name="phone"
+//               placeholder="phone-number"
+//               value={this.state.phone}
+//               onChange={e => this.change(e)}
+//             />
+//           </label>
+//           <br />
+//           <label>
+//             Appointment Date: <input type="text" name="fname" />
+//           </label>
+//           <label>
+//             Appointment Time: <input type="text" name="fname" />
+//           </label>
+//           <br />
+//         </form>
+//         <button onClick={() => this.onSubmit()}>Submit</button>
+//         <h2 style={linkstyle}>Appointment is under construction</h2>
+//       </div>
+//     );
+//   }
+// }
 
-      axios
-        .post(`https://vast-wave-57983.herokuapp.com/email`, data)
-        .then(res => {
-          console.log(res);
-          console.log(res.data);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    }
-
-    this.setState({
-      updating: false,
-      firstName: "",
-      lastName: "",
-      email: "",
-      phone: ""
-    });
-  };
-
-  render() {
-    return (
-      <div>
-        3+
-        <form style={linkstyle}>
-          <label>
-            appointment Id:
-            <input
-              name="Appid"
-              value={this.state.Appid}
-              onChange={e => this.change(e)}
-            />
-          </label>
-        </form>
-        <button onClick={() => this.onRetrieve()}>retrieve</button>
-        <form style={linkstyle}>
-          <p>Where would you like pictures taken?</p>
-          <input
-            type="radio"
-            name="loc"
-            value="Studio"
-            onChange={e => this.change(e)}
-          />{" "}
-          In-studio <br />
-          <input
-            type="radio"
-            name="loc"
-            value="location"
-            onChange={e => this.change(e)}
-          />{" "}
-          Location <br />
-          <p>What type of photoshoot are you interested in</p>
-          <input
-            type="radio"
-            name="photoType"
-            value="Headshot"
-            onChange={e => this.change(e)}
-          />{" "}
-          Headshot
-          <br />
-          <input
-            type="radio"
-            name="photoType"
-            value="Portraiture"
-            onChange={e => this.change(e)}
-          />{" "}
-          Portraiture
-          <br />
-          <input
-            type="radio"
-            name="photoType"
-            value="fashion"
-            onChange={e => this.change(e)}
-          />{" "}
-          Fashion
-          <br />
-          <p>how many outfit changes would you need</p>
-          <input
-            list="numchanges"
-            name="outfitChanges"
-            onChange={e => this.change(e)}
-          />
-          <datalist id="numchanges">
-            <option value="0" />
-            <option value="1" />
-            <option value="2" />
-            <option value="3" />
-            <option value="4" />
-          </datalist>
-          <p /> <bt />
-          <label>Price: {this.state.price}</label>
-        </form>
-        <form style={linkstyle}>
-          <label>
-            {" "}
-            First name:
-            <input
-              name="firstName"
-              placeholder="first name"
-              value={this.state.firstName}
-              onChange={e => this.change(e)}
-            />
-          </label>
-          <label>
-            Last name:
-            <input
-              name="lastName"
-              placeholder="last name"
-              value={this.state.lastName}
-              onChange={e => this.change(e)}
-            />
-          </label>
-        </form>
-        <form style={linkstyle}>
-          <label>
-            {" "}
-            email:
-            <input
-              name="email"
-              placeholder="email"
-              value={this.state.email}
-              onChange={e => this.change(e)}
-            />
-          </label>
-          <label>
-            {" "}
-            Phone number:
-            <input
-              name="phone"
-              placeholder="phone-number"
-              value={this.state.phone}
-              onChange={e => this.change(e)}
-            />
-          </label>
-          <br />
-          <label>
-            Appointment Date: <input type="text" name="fname" />
-          </label>
-          <label>
-            Appointment Time: <input type="text" name="fname" />
-          </label>
-          <br />
-        </form>
-        <button onClick={() => this.onSubmit()}>Submit</button>
-        <h2 style={linkstyle}>Appointment is under construction</h2>
-      </div>
-    );
-  }
-}
-
-const linkstyle = {
-  color: "#333",
-  textDecoration: "none"
-};
+// const linkstyle = {
+//   color: "#333",
+//   textDecoration: "none"
+// };

@@ -10,7 +10,9 @@ export default function Home() {
       .then(res => setData(res.data));
   }, []);
   return (
-    <div> <p>THIS IS SPARTA</p>
+    <div>
+      {" "}
+      <p>THIS IS SPARTA</p>
       {data &&
         data.map(item => (
           <div key={item._id} style={{ color: "#333", textDecoration: "none" }}>

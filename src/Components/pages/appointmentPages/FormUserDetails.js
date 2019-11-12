@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import DateFnsUtils from "@date-io/date-fns";
 import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
+import Divider from "@material-ui/core/Divider";
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
@@ -40,11 +41,15 @@ class FormUserDetails extends Component {
     return (
       <div>
         <Grid className={classes.Grid} container spacing={1}>
+          <Grid item xs={12}>
+            <Divider />
+          </Grid>
+
           <Grid item xs={6}>
             <TextField
               label="First Name"
               onChange={handleChange("firstName")}
-              defaultValue={values.firstName}
+              value={values.firstName}
               margin="normal"
             />
           </Grid>
@@ -52,7 +57,7 @@ class FormUserDetails extends Component {
             <TextField
               label="Last Name"
               onChange={handleChange("lastName")}
-              defaultValue={values.lastName}
+              value={values.lastName}
               margin="normal"
             />
           </Grid>
@@ -61,7 +66,7 @@ class FormUserDetails extends Component {
             <TextField
               label="Email"
               onChange={handleChange("email")}
-              defaultValue={values.email}
+              value={values.email}
               margin="normal"
             />
           </Grid>
@@ -69,7 +74,7 @@ class FormUserDetails extends Component {
             <TextField
               label="Phone Number"
               onChange={handleChange("phone")}
-              defaultValue={values.email}
+              value={values.phone}
               margin="normal"
             />
           </Grid>
@@ -95,6 +100,7 @@ class FormUserDetails extends Component {
                 label="Time picker"
                 value={values.appDate}
                 onChange={handleDateChange}
+                minutesStep={15}
                 KeyboardButtonProps={{
                   "aria-label": "change time"
                 }}

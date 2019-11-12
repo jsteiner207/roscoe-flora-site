@@ -21,6 +21,7 @@ class Confirm extends Component {
   continue = e => {
     e.preventDefault();
     // PROCESS FORM //
+    this.props.onSubmit();
     this.props.nextStep();
   };
 

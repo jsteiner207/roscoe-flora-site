@@ -22,7 +22,7 @@ export default function FormDialog(props) {
   const [open, setOpen] = React.useState(false);
   const [firt, setFirst] = React.useState("john"); //props.appointment.first_name);
   const [selectedDate, setSelectedDate] = React.useState(
-    new Date("2014-08-18T21:11:54")
+    new Date(props.appointment.appointment_date)
   );
 
   const handleDateChange = date => {
@@ -127,7 +127,7 @@ export default function FormDialog(props) {
                 margin="normal"
                 id="date-picker-inline"
                 label="Date picker inline"
-                value={selectedDate}
+                value={props.appointment.appointment_date}
                 onChange={handleDateChange}
                 KeyboardButtonProps={{
                   "aria-label": "change date"
@@ -138,7 +138,7 @@ export default function FormDialog(props) {
                 margin="normal"
                 id="time-picker"
                 label="Time picker"
-                value={selectedDate}
+                value={props.appointment.appointment_date}
                 onChange={handleDateChange}
                 KeyboardButtonProps={{
                   "aria-label": "change time"

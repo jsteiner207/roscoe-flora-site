@@ -99,11 +99,9 @@ export default function Dashboard() {
                   color="textSecondary"
                   gutterBottom
                 >
-                  {item.first_name}
+                  {item.first_name} {item.last_name}
                 </Typography>
-                <Typography variant="h5" component="h2">
-                  {item.last_name}
-                </Typography>
+                <Typography variant="h5" component="h2"></Typography>
                 <Typography className={classes.pos} color="textSecondary">
                   adjective
                 </Typography>

@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import FormUserDetails from "./FormUserDetails";
-import FormPersonalDetails from "./FormPersonalDetails";
-import Confirm from "./Confirm";
-import Success from "./Success";
+import FormUserDetails from "./appointmentPages/FormUserDetails";
+import FormPersonalDetails from "./appointmentPages/FormPersonalDetails";
+import Confirm from "./appointmentPages/Confirm";
+import Success from "./appointmentPages/Success";
+import Reschedule from "./appointmentPages/reschedule";
 import { MuiThemeProvider } from "@material-ui/core";
 import { makeStyles, createMuiTheme } from "@material-ui/core/styles";
-
+import axios from "axios";
 import red from "@material-ui/core/colors/red";
 import { orange } from "@material-ui/core/colors";
 
@@ -33,17 +34,19 @@ const useStyles = makeStyles({
     left: "20px"
   }
 });
+
 export default class UserForm extends Component {
   state = {
+    doc_id: "",
     step: 1,
     price: 0,
+    status: 1,
     updating: false,
     Appid: "",
     service: "",
     changes: "",
     location: "",
     address: "",
-    photoType: "",
     firstName: "",
     lastName: "",
     email: "",
@@ -52,14 +55,125 @@ export default class UserForm extends Component {
     appDate: new Date("2014-08-18T21:11:54")
   };
 
+  onCancel = async () => {
+    await axios
+      .get(
+        `https://vast-wave-57983.herokuapp.com/api/items/${this.state.Appid}`
+      )
+      .then(res => {
+        console.log(res.data);
+        this.setState({
+          doc_id: res.data._id
+        });
+      });
+
+    axios
+      .delete(
+        `https://vast-wave-57983.herokuapp.com/api/items/${this.state.doc_id}`
+      )
+      .then(console.log("success"))
+      .catch(err => console.log(err));
+
+    this.setState({ status: 3, step: 4 });
+  };
+
+  onRetrieve = () => {
+    console.log(this.state.Appid);
+    axios
+      .get(
+        `https://vast-wave-57983.herokuapp.com/api/items/${this.state.Appid}`
+      )
+      .then(res => {
+        console.log(res.data);
+        this.setState({
+          changes: res.data.outfit_changes,
+          location: res.data.location,
+          service: res.data.photoshoot_type,
+          firstName: res.data.first_name,
+          lastName: res.data.last_name,
+          email: res.data.email_name,
+          phone: res.data.phone_number,
+          address: res.data.address,
+          specrec: res.data.special_requests,
+          appDate: new Date(res.data.appointment_date),
+          updating: true
+        });
+      });
+    console.log(this.state.appDate);
+    this.render();
+    this.handleDateChange(this.state.appDate);
+    this.setState({ status: 2 });
+  };
+
   handleDateChange = date => {
     try {
-      date.setMinutes("00");
       this.setState({ appDate: date });
       console.log(this.state.appDate);
     } catch {
       console.log("d");
     }
+  };
+
+  // This generates an appointment id for the customer
+  generateKey = length => {
+    let appId = "";
+    let possible = "abcdefghijklmnopqrstuvwxyz0123456789";
+    for (let i = 0; i < length; i++) {
+      appId += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return appId;
+  };
+
+  onSubmit = () => {
+    let data = {
+      first_name: this.state.firstName,
+      last_name: this.state.lastName,
+      email_name: this.state.email,
+      phone_number: this.state.phone,
+      outfit_changes: this.state.changes,
+      photoshoot_type: this.state.service,
+      location: this.state.location,
+      address: this.state.address,
+      special_requests: this.state.specrec,
+      appointment_date: this.state.appDate,
+      appointment_id: this.state.updating
+        ? this.state.Appid
+        : this.generateKey(6) //if updating, use default appid. otherwise, make one
+    };
+
+    if (this.state.updating === true) {
+      axios.put(
+        `https://vast-wave-57983.herokuapp.com/api/items/${this.state.Appid}`,
+        data
+      );
+    } else {
+      // stores the form data in the database
+      axios
+        .post(`https://vast-wave-57983.herokuapp.com/api/items`, data)
+        .then(res => {
+          console.log(res);
+          console.log(res.data);
+        })
+        .catch(err => console.log(err));
+
+      axios
+        .post(`https://vast-wave-57983.herokuapp.com/email`, data)
+        .then(res => {
+          console.log(res);
+          console.log(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+
+    this.setState({
+      updating: false,
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: ""
+    });
   };
 
   // Proceed to next step
@@ -103,7 +217,8 @@ export default class UserForm extends Component {
       changes,
       address,
       location,
-      appDate
+      appDate,
+      Appid
     } = this.state;
     const values = {
       firstName,
@@ -115,13 +230,21 @@ export default class UserForm extends Component {
       changes,
       address,
       location,
-      appDate
+      appDate,
+      Appid
     };
 
     switch (step) {
       case 1:
         return (
           <MuiThemeProvider theme={this.theme}>
+            <Reschedule
+              handleChange={this.handleChange}
+              onRetrieve={this.onRetrieve}
+              onCancel={this.onCancel}
+              values={values}
+            />
+
             <FormUserDetails
               nextStep={this.nextStep}
               handleDateChange={this.handleDateChange}
@@ -150,63 +273,12 @@ export default class UserForm extends Component {
               nextStep={this.nextStep}
               prevStep={this.prevStep}
               values={values}
+              onSubmit={this.onSubmit}
             />
           </MuiThemeProvider>
         );
       case 4:
-        return <Success />;
+        return <Success status={this.state.status} />;
     }
   }
 }
-
-// export default UserForm;
-// import Grid from "@material-ui/core/Grid";
-// import DateFnsUtils from "@date-io/date-fns";
-// import TextField from "@material-ui/core/TextField";
-
-// import {
-//   MuiPickersUtilsProvider,
-//   KeyboardTimePicker,
-//   KeyboardDatePicker
-// } from "@material-ui/pickers";
-
-// export default function MaterialUIPickers() {
-//   // The first commit of Material-UI
-//   const [selectedDate, setSelectedDate] = React.useState(
-//     new Date("2014-08-18T21:11:54")
-//   );
-
-//   const handleDateChange = date => {
-//     setSelectedDate(date);
-//   };
-
-//   return (
-//     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-//       <Grid container justify="space-around">
-//         <KeyboardDatePicker
-//           disableToolbar
-//           variant="inline"
-//           format="MM/dd/yyyy"
-//           margin="normal"
-//           id="date-picker-inline"
-//           label="Date picker inline"
-//           value={selectedDate}
-//           onChange={handleDateChange}
-//           KeyboardButtonProps={{
-//             "aria-label": "change date"
-//           }}
-//         />
-//         <KeyboardTimePicker
-//           margin="normal"
-//           id="time-picker"
-//           label="Time picker"
-//           value={selectedDate}
-//           onChange={handleDateChange}
-//           KeyboardButtonProps={{
-//             "aria-label": "change time"
-//           }}
-//         />
-//       </Grid>
-//     </MuiPickersUtilsProvider>
-//   );
-// }
