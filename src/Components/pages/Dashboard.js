@@ -123,16 +123,22 @@ export default function Dashboard() {
                   {new Date(item.appointment_date).getDay()}
                 </Typography>
                 <Typography className={classes.pos} color="textSecondary">
-                  {item.address}
+                  {new Date(item.appointment_date).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit"
+                  })}
+                </Typography>
+                <Typography className={classes.pos} color="textSecondary">
+                  {item.location == "in-studio" ? item.location : item.address}
                 </Typography>
                 <Typography variant="body2" component="p">
-                  well meaning and kindly.
+                  {item.photoshoot_type}
                   <br />
-                  {'"a benevolent smile"'}
+                  {"Dress changes: " + item.outfit_changes}
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button size="small">Learn More</Button>
+                <Button size="small">View</Button>
                 <IconButton
                   className={classes.right}
                   onClick={() => editHandleClick(item)}

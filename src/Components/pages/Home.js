@@ -12,14 +12,12 @@ export default function Home() {
   return (
     <div>
       {" "}
-      <p>THIS IS SPARTA</p>
       {data &&
         data.map(item => (
-          <div key={item._id} style={{ color: "#333", textDecoration: "none" }}>
-            <h1>{item.first_name}</h1>
-            <h3>{item.last_name}</h3>
-            <p>{item.date}</p>
-          </div>
+          <div
+            key={item._id}
+            style={{ color: "#333", textDecoration: "none" }}
+          ></div>
         ))}
       <img alt="logo" src={fun} />
     </div>
