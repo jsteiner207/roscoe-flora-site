@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import logo from "../../woman.jpg";
+import fun from "../../woman.jpg";
 import axios from "axios";
 
 export default function Home() {
@@ -21,7 +21,7 @@ export default function Home() {
             <p>{item.date}</p>
           </div>
         ))}
-      <img alt="logo" src={logo} />
+      <img alt="logo" src={fun} />
     </div>
   );
 }

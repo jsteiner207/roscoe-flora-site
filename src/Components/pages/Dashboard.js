@@ -16,6 +16,9 @@ import DashboardAppbar from "./dashboardComponents/DashboardAppbar";
 // import AddAppointment from "./dashboardComponents/AddAppointment";
 
 const useStyles = makeStyles({
+  div: {
+    width: "-webkit-fill-available"
+  },
   Card: {
     backgroundColor: "lightgray",
     color: "black",
@@ -72,6 +75,20 @@ export default function Dashboard() {
     setDelete(false);
     setEdit(false);
   };
+  const mlist = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ];
 
   const editHandleClick = item => {
     setAppointment(item);
@@ -87,7 +104,7 @@ export default function Dashboard() {
       .then(res => setData(res.data));
   }, []);
   return (
-    <div>
+    <div className={classes.div}>
       <DashboardAppbar />
       {data &&
         data.map(item => (
@@ -101,9 +118,12 @@ export default function Dashboard() {
                 >
                   {item.first_name} {item.last_name}
                 </Typography>
-                <Typography variant="h5" component="h2"></Typography>
+                <Typography variant="h5" component="h2">
+                  {mlist[new Date(item.appointment_date).getMonth()]},{" "}
+                  {new Date(item.appointment_date).getDay()}
+                </Typography>
                 <Typography className={classes.pos} color="textSecondary">
-                  adjective
+                  {item.address}
                 </Typography>
                 <Typography variant="body2" component="p">
                   well meaning and kindly.

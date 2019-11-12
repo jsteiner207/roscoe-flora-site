@@ -278,7 +278,7 @@ export default class UserForm extends Component {
           </MuiThemeProvider>
         );
       case 4:
-        return <Success status={this.state.status} />;
+        return <Success status={this.state.status} values={values} />;
     }
   }
 }
