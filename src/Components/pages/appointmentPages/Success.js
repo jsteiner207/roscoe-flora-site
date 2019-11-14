@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import Dialog from "@material-ui/core/Dialog";
-import AppBar from "@material-ui/core/AppBar";
 import { MuiThemeProvider } from "@material-ui/core";
 
 export class Success extends Component {
@@ -16,8 +14,8 @@ export class Success extends Component {
   };
 
   render() {
-    const { values, handleChange } = this.props;
-    const { classes } = this.props;
+    // const { values, handleChange } = this.props;
+    // const { classes } = this.props;
     switch (this.props.status) {
       case 1:
         return (

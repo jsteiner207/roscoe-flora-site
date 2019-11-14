@@ -5,7 +5,7 @@ import About from "./Components/pages/About";
 import Home from "./Components/pages/Home";
 import Header from "./Components/Header";
 import Portfolio from "./Components/pages/Portfolio";
-import Appointment from "./Components/pages/appointment";
+// import Appointment from "./Components/pages/appointment";
 import Contact from "./Components/pages/Contact";
 import Adminlogin from "./Components/pages/adminlogin";
 import Dashboard from "./Components/pages/Dashboard";

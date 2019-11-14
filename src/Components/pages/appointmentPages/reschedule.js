@@ -28,7 +28,7 @@ const styles = {
 class reschedule extends Component {
   render() {
     const { classes } = this.props;
-    const { values, handleChange } = this.props;
+    const { handleChange } = this.props;
 
     return (
       <div>

@@ -9,7 +9,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 import axios from "axios";
 import Button from "@material-ui/core/Button";
-
+import { Redirect } from "react-router-dom";
 import AppointmentDialog from "./dashboardComponents/appointmentDialog";
 import EditAppointment from "./dashboardComponents/editAppointment";
 import DashboardAppbar from "./dashboardComponents/DashboardAppbar";
@@ -69,6 +69,7 @@ export default function Dashboard() {
   const [appointment, setAppointment] = React.useState(def);
 
   const handleClickDelete = () => {
+    console.log(JSON.parse(localStorage.getItem("loggedIn")).slate);
     setDelete(true);
   };
   const handleClose = () => {
@@ -129,7 +130,7 @@ export default function Dashboard() {
                   })}
                 </Typography>
                 <Typography className={classes.pos} color="textSecondary">
-                  {item.location == "in-studio" ? item.location : item.address}
+                  {item.location === "in-studio" ? item.location : item.address}
                 </Typography>
                 <Typography variant="body2" component="p">
                   {item.photoshoot_type}

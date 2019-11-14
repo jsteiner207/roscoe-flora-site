@@ -15,12 +15,13 @@ import { makeStyles, createMuiTheme } from "@material-ui/core/styles";
 import { MuiThemeProvider } from "@material-ui/core";
 import red from "@material-ui/core/colors/red";
 //import { dark } from "@material-ui/core/styles/createPalette";
+import { Redirect } from "react-router-dom";
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
+      <Link color="inherit" href="https://roscoeflora.com/">
         roscoeflora
       </Link>{" "}
       {new Date().getFullYear()}
@@ -62,6 +63,44 @@ const useStyles = makeStyles(theme => ({
 export default function SignInSide() {
   const classes = useStyles();
 
+  try {
+    if (JSON.parse(localStorage.getItem("loggedIn")).slate == null) {
+      console.log("yeet");
+    }
+  } catch {
+    let loggedIn = JSON.stringify({
+      slate: "false"
+    });
+    localStorage.setItem("loggedIn", loggedIn);
+  }
+
+  const username = "admin";
+  const pass = "pass";
+
+  const [password, setPassword] = React.useState("");
+  const [user, setUser] = React.useState("");
+  const [toDashboard, setToDashboard] = React.useState(false);
+
+  const handleUserChange = e => {
+    setUser(e.target.value);
+  };
+
+  const handlePasswordChange = e => {
+    setPassword(e.target.value);
+  };
+
+  const checkpassword = () => {
+    if (user === username && password === pass) {
+      let loggedIn = JSON.stringify({
+        slate: "true"
+      });
+
+      localStorage.setItem("loggedIn", loggedIn);
+
+      setToDashboard(true);
+    }
+  };
+
   const theme = createMuiTheme({
     palette: {
       primary: red,
@@ -69,10 +108,14 @@ export default function SignInSide() {
     }
   });
 
-  console.log(theme);
-
   return (
     <MuiThemeProvider theme={theme}>
+      {toDashboard ? <Redirect to="/admin/dashboard" /> : null}
+
+      {JSON.parse(localStorage.getItem("loggedIn")).slate == "true" ? (
+        <Redirect to="/admin/dashboard" />
+      ) : null}
+
       <Grid container component="main" className={classes.root}>
         <CssBaseline />
         <Grid item xs={false} sm={4} md={7} className={classes.image} />
@@ -88,6 +131,8 @@ export default function SignInSide() {
               <TextField
                 variant="outlined"
                 margin="normal"
+                value={user}
+                onChange={handleUserChange}
                 required
                 fullWidth
                 id="email"
@@ -101,6 +146,8 @@ export default function SignInSide() {
                 margin="normal"
                 required
                 fullWidth
+                value={password}
+                onChange={handlePasswordChange}
                 name="password"
                 label="Password"
                 type="password"
@@ -111,16 +158,19 @@ export default function SignInSide() {
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
-              <Button
-                type="submit"
-                fullWidth
-                variant="outlined"
-                color="primary"
-                className={classes.submit}
-              >
-                Sign In
-              </Button>
-              <Grid container>
+            </form>
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="outlined"
+              color="primary"
+              className={classes.submit}
+              onClick={checkpassword}
+            >
+              Sign In
+            </Button>
+            {/* <Grid container>
                 <Grid item xs>
                   <Link href="#" variant="body1">
                     Forgot password?
@@ -131,11 +181,10 @@ export default function SignInSide() {
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
-              </Grid>
-              <Box mt={5}>
-                <Copyright />
-              </Box>
-            </form>
+              </Grid> */}
+            <Box mt={5}>
+              <Copyright />
+            </Box>
           </div>
         </Grid>
       </Grid>

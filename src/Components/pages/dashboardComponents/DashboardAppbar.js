@@ -6,9 +6,10 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-
+import Switch from "@material-ui/core/Switch";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
+import { Redirect } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -27,6 +28,29 @@ export default function MenuAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
+  try {
+    if (JSON.parse(localStorage.getItem("loggedIn")).slate == null) {
+      console.log("yeet");
+    }
+  } catch {
+    let loggedIn = JSON.stringify({
+      slate: "false"
+    });
+    localStorage.setItem("loggedIn", loggedIn);
+  }
+
+  const status = JSON.parse(localStorage.getItem("loggedIn"));
+
+  const [signed, setSigned] = React.useState(status);
+
+  const handleSignedChange = event => {
+    setSigned(event.target.checked);
+    let logged = JSON.stringify({
+      slate: "false"
+    });
+
+    localStorage.setItem("loggedIn", logged);
+  };
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -37,7 +61,13 @@ export default function MenuAppBar() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="secondary">
+      <AppBar position="static">
+        {status.slate == "false" ? (
+          <Redirect to="/admin/" />
+        ) : (
+          console.log(status)
+        )}
+
         <Toolbar>
           <IconButton
             edge="start"
@@ -47,6 +77,8 @@ export default function MenuAppBar() {
           >
             <MenuIcon />
           </IconButton>
+          <Typography>logout</Typography>
+          <Switch checked={signed} onChange={handleSignedChange} />
           <Typography variant="h6" className={classes.title}>
             Scheduled Appointments
           </Typography>

@@ -20,7 +20,7 @@ import {
 
 export default function FormDialog(props) {
   const [open, setOpen] = React.useState(false);
-  const [firt, setFirst] = React.useState("john"); //props.appointment.first_name);
+  //const [firt, setFirst] = React.useState("john"); //props.appointment.first_name);
   const [selectedDate, setSelectedDate] = React.useState(
     new Date(props.appointment.appointment_date)
   );
@@ -30,7 +30,7 @@ export default function FormDialog(props) {
   };
 
   const handleFirstChange = e => {
-    console.log(firt);
+    console.log("yeet");
   };
   const handleClickOpen = () => {
     props.handleClose();

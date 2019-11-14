@@ -10,31 +10,6 @@ import axios from "axios";
 import red from "@material-ui/core/colors/red";
 import { orange } from "@material-ui/core/colors";
 
-const useStyles = makeStyles({
-  text: {
-    backgroundColor: "lightgray",
-    color: "black",
-    minWidth: 275,
-    marginRight: 50,
-    marginTop: 60
-  },
-  bullet: {
-    display: "inline-block",
-    margin: "0 2px",
-    transform: "scale(0.8)"
-  },
-  title: {
-    fontSize: 14
-  },
-  pos: {
-    marginBottom: 12
-  },
-  right: {
-    marginLeft: "auto",
-    left: "20px"
-  }
-});
-
 export default class UserForm extends Component {
   state = {
     doc_id: "",
