@@ -10,6 +10,13 @@ import Switch from "@material-ui/core/Switch";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import { Redirect } from "react-router-dom";
+import Drawer from '@material-ui/core/Drawer';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+import MailIcon from '@material-ui/icons/Mail';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -20,13 +27,55 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     flexGrow: 1
+  },
+  list: {
+    width: 250,
+  },
+  fullList: {
+    width: 'auto',
   }
 }));
 
-export default function MenuAppBar() {
+export default function MenuAppBar(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const [state, setState] = React.useState({
+    top: false,
+  });
+
+  // this is used to toggle the drawer open and close
+  const toggleDrawer = (side, open) => event => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+    setState({ ...state, [side]: open });
+  };
+
+  // this shows the content on the drawer
+
+  const logText = (tex) => {
+    props.setPage(tex)
+    console.log(tex);
+  }
+  const sideList = side => (
+    <div
+      className={classes.list}
+      role="presentation"
+      onClick={toggleDrawer(side, false)}
+      onKeyDown={toggleDrawer(side, false)}
+    >
+      <List>
+        {['Appointments', 'Customers', 'Contact messages', 'Web Editor', 'admin accounts'].map((text, index) => (
+          <ListItem button key={text} onClick={() => logText(text)}>
+            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+            <ListItemText primary={text} />
+          </ListItem>
+        ))}
+      </List>
+
+    </div>
+  );
 
   try {
     if (JSON.parse(localStorage.getItem("loggedIn")).slate == null) {
@@ -62,14 +111,14 @@ export default function MenuAppBar() {
   return (
     <div className={classes.root}>
       <AppBar position="static">
-        {status.slate == "false" ? (
+        {status.slate === "false" ? (
           <Redirect to="/admin/" />
         ) : (
-          console.log(status)
-        )}
+            console.log(status)
+          )}
 
         <Toolbar>
-          <IconButton
+          <IconButton onClick={toggleDrawer('left', true)}
             edge="start"
             className={classes.menuButton}
             color="inherit"
@@ -108,11 +157,14 @@ export default function MenuAppBar() {
               onClose={handleClose}
             >
               <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>My account</MenuItem>
+              <MenuItem onClick={handleClose}>Add account</MenuItem>
             </Menu>
           </div>
         </Toolbar>
       </AppBar>
+      <Drawer open={state.left} onClose={toggleDrawer('left', false)}>
+        {sideList('left')}
+      </Drawer>
     </div>
   );
 }

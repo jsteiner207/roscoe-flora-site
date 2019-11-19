@@ -9,7 +9,7 @@ import Link from "@material-ui/core/Link";
 import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
-//import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import axios from "axios";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, createMuiTheme } from "@material-ui/core/styles";
 import { MuiThemeProvider } from "@material-ui/core";
@@ -74,8 +74,6 @@ export default function SignInSide() {
     localStorage.setItem("loggedIn", loggedIn);
   }
 
-  const username = "admin";
-  const pass = "pass";
 
   const [password, setPassword] = React.useState("");
   const [user, setUser] = React.useState("");
@@ -90,15 +88,20 @@ export default function SignInSide() {
   };
 
   const checkpassword = () => {
-    if (user === username && password === pass) {
-      let loggedIn = JSON.stringify({
-        slate: "true"
-      });
-
-      localStorage.setItem("loggedIn", loggedIn);
-
-      setToDashboard(true);
-    }
+    axios
+      .post(`https://vast-wave-57983.herokuapp.com/api/accounts/${user}`, {
+        password: password
+      })
+      .then(res => {
+        if (res.data.status === true) {
+          let loggedIn = JSON.stringify({
+            slate: "true"
+          });
+          localStorage.setItem("loggedIn", loggedIn);
+          setToDashboard(true);
+        }
+      })
+      .catch(err => console.log(err));
   };
 
   const theme = createMuiTheme({
@@ -112,7 +115,7 @@ export default function SignInSide() {
     <MuiThemeProvider theme={theme}>
       {toDashboard ? <Redirect to="/admin/dashboard" /> : null}
 
-      {JSON.parse(localStorage.getItem("loggedIn")).slate == "true" ? (
+      {JSON.parse(localStorage.getItem("loggedIn")).slate === "true" ? (
         <Redirect to="/admin/dashboard" />
       ) : null}
 

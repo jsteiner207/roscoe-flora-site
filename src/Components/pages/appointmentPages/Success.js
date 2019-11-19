@@ -43,6 +43,12 @@ export class Success extends Component {
             </React.Fragment>
           </MuiThemeProvider>
         );
+      default:
+        return (<MuiThemeProvider>
+          <React.Fragment>
+            <h1>An error has occured :( </h1>
+          </React.Fragment>
+        </MuiThemeProvider>)
     }
   }
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -7,6 +7,9 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles } from "@material-ui/core/styles";
+import axios from "axios";
+
+
 
 import UpdateSnack from "./updatesnack";
 
@@ -19,23 +22,42 @@ import {
 } from "@material-ui/pickers";
 
 export default function FormDialog(props) {
+
   const [open, setOpen] = React.useState(false);
+  const [state, setState] = React.useState({
+    first_name: "",
+    last_name: ""
+  });
+
+  // updates the state after the component is rendered so the state isn't blank
+  useEffect(() => {
+    setState(props.appointment)
+  }, [props.appointment]);
+
+
+  const handleChange = name => event => {
+    setState({ ...state, [name]: event.target.value });
+  };
+
   //const [firt, setFirst] = React.useState("john"); //props.appointment.first_name);
-  const [selectedDate, setSelectedDate] = React.useState(
-    new Date(props.appointment.appointment_date)
-  );
 
   const handleDateChange = date => {
-    setSelectedDate(date);
-  };
+    try {
+      setState({ ...state, "appointment_date": date });
+    } catch (err) {
+      console.log(err)
+    };
+  }
 
-  const handleFirstChange = e => {
-    console.log("yeet");
-  };
   const handleClickOpen = () => {
+    axios.put(
+      `https://vast-wave-57983.herokuapp.com/api/items/${state.appointment_id}`,
+      state
+    );
     props.handleClose();
     setOpen(true);
   };
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -55,62 +77,70 @@ export default function FormDialog(props) {
   const classes = useStyles();
 
   return (
+
     <div>
       <Dialog
         open={props.open}
         onClose={props.HandleClose}
         appointment={props.appointment}
       >
-        <DialogTitle id="form-dialog-title">Edit Appointment Info</DialogTitle>
+        <DialogTitle id="form-dialog-title">Update Appointment Info</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To subscribe to this website, please enter your email address here.
-            We will send updates occasionally.
+            From here you can update information about this appointment.
           </DialogContentText>
 
           <form className={classes.container}>
             <TextField
-              id="standard-basic"
               className={classes.textField}
               label="First Name"
               margin="normal"
-              defaultValue={props.appointment.first_name}
-              onChange={handleFirstChange}
+              value={state.first_name}
+              onChange={handleChange("first_name")}
             />
             <TextField
-              id="filled-basic"
               className={classes.textField}
               label="Last Name"
               margin="normal"
-              value={props.appointment.last_name}
+              value={state.last_name}
+              onChange={handleChange("last_name")}
             />
             <TextField
-              id="outlined-basic"
               className={classes.textField}
               label="email"
               margin="normal"
-              value={props.appointment.email_name}
+              value={state.email_name}
+              onChange={handleChange("email_name")}
+
             />
             <TextField
-              id="outlined-basic"
               className={classes.textField}
               label="Phone Number"
               margin="normal"
-              value={props.appointment.phone_number}
+              value={state.phone_number}
+              onChange={handleChange("phone_number")}
             />
             <TextField
-              id="outlined-basic"
               className={classes.textField}
               label="Location"
               margin="normal"
-              value={props.appointment.location}
+              value={state.location}
+              onChange={handleChange("location")}
             />
             <TextField
-              id="outlined-basic"
               className={classes.textField}
-              label="service"
+              label="Address"
               margin="normal"
-              value={props.appointment.photoshoot_type}
+              value={state.address}
+              onChange={handleChange("address")}
+            />
+            <TextField
+              className={classes.textField}
+              label="Service"
+              margin="normal"
+              value={state.photoshoot_type}
+              onChange={handleChange("photoshoot_type")}
+
             />
             <TextField
               id="outlined-basic"
@@ -118,6 +148,8 @@ export default function FormDialog(props) {
               label="Dress changes"
               margin="normal"
               value={props.appointment.outfit_changes}
+              onChange={handleChange("outfit_changes")}
+
             />
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <KeyboardDatePicker
@@ -127,7 +159,7 @@ export default function FormDialog(props) {
                 margin="normal"
                 id="date-picker-inline"
                 label="Date picker inline"
-                value={props.appointment.appointment_date}
+                value={state.appointment_date}
                 onChange={handleDateChange}
                 KeyboardButtonProps={{
                   "aria-label": "change date"
@@ -138,7 +170,7 @@ export default function FormDialog(props) {
                 margin="normal"
                 id="time-picker"
                 label="Time picker"
-                value={props.appointment.appointment_date}
+                value={state.appointment_date}
                 onChange={handleDateChange}
                 KeyboardButtonProps={{
                   "aria-label": "change time"

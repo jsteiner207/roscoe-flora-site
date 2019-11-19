@@ -5,7 +5,7 @@ import Confirm from "./appointmentPages/Confirm";
 import Success from "./appointmentPages/Success";
 import Reschedule from "./appointmentPages/reschedule";
 import { MuiThemeProvider } from "@material-ui/core";
-import { makeStyles, createMuiTheme } from "@material-ui/core/styles";
+import { createMuiTheme } from "@material-ui/core/styles";
 import axios from "axios";
 import red from "@material-ui/core/colors/red";
 import { orange } from "@material-ui/core/colors";
@@ -254,6 +254,8 @@ export default class UserForm extends Component {
         );
       case 4:
         return <Success status={this.state.status} values={values} />;
+      default:
+        return <h1>An error has occured :(</h1>
     }
   }
 }

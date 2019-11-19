@@ -1,31 +1,182 @@
 import React from "react";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles } from "@material-ui/core/styles";
-import SpeedDial from "@material-ui/lab/SpeedDial";
-import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
+import axios from "axios";
+import UpdateSnack from "./updatesnack";
+import DateFnsUtils from "@date-io/date-fns";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+  KeyboardDatePicker
+} from "@material-ui/pickers";
+export default function FormDialog(props) {
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    height: 380,
-    transform: "translateZ(0px)",
-    flexGrow: 1
-  },
-  speedDial: {
-    position: "absolute",
-    bottom: theme.spacing(2),
-    right: theme.spacing(2)
+
+
+  const [open, setOpen] = React.useState(false);
+  const [state, setState] = React.useState({
+    first_name: "",
+    last_name: ""
+  });
+
+  const handleChange = name => event => {
+    setState({ ...state, [name]: event.target.value });
+  };
+
+  const handleDateChange = date => {
+    try {
+      setState({ ...state, "appointment_date": date });
+    } catch (err) {
+      console.log(err)
+    };
   }
-}));
 
-export default function OpenIconSpeedDial() {
+  const handleClickOpen = () => {
+    axios.post(
+      `https://vast-wave-57983.herokuapp.com/api/items/`,
+      state
+    );
+    props.handleClose();
+    setOpen(true);   //this is for the snackbar
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const useStyles = makeStyles(theme => ({
+    container: {
+      display: "flex",
+      flexWrap: "wrap"
+    },
+    textField: {
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(1),
+      width: 200
+    }
+  }));
+
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
-      <SpeedDial
-        ariaLabel="SpeedDial openIcon example"
-        className={classes.speedDial}
-        icon={<SpeedDialIcon />}
-      ></SpeedDial>
+
+    <div>
+      <Dialog
+        open={props.open}
+        onClose={props.HandleClose}
+        appointment={props.appointment}
+      >
+        <DialogTitle id="form-dialog-title">Add Appointment</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            From here you can add appointments
+          </DialogContentText>
+
+          <form className={classes.container}>
+            <TextField
+              className={classes.textField}
+              label="First Name"
+              margin="normal"
+              value={state.first_name}
+              onChange={handleChange("first_name")}
+            />
+            <TextField
+              className={classes.textField}
+              label="Last Name"
+              margin="normal"
+              value={state.last_name}
+              onChange={handleChange("last_name")}
+            />
+            <TextField
+              className={classes.textField}
+              label="email"
+              margin="normal"
+              value={state.email_name}
+              onChange={handleChange("email_name")}
+
+            />
+            <TextField
+              className={classes.textField}
+              label="Phone Number"
+              margin="normal"
+              value={state.phone_number}
+              onChange={handleChange("phone_number")}
+            />
+            <TextField
+              className={classes.textField}
+              label="Location"
+              margin="normal"
+              value={state.location}
+              onChange={handleChange("location")}
+            />
+            <TextField
+              className={classes.textField}
+              label="Address"
+              margin="normal"
+              value={state.address}
+              onChange={handleChange("address")}
+            />
+            <TextField
+              className={classes.textField}
+              label="Service"
+              margin="normal"
+              value={state.photoshoot_type}
+              onChange={handleChange("photoshoot_type")}
+
+            />
+            <TextField
+              id="outlined-basic"
+              className={classes.textField}
+              label="Dress changes"
+              margin="normal"
+              value={state.outfit_changes}
+              onChange={handleChange("outfit_changes")}
+
+            />
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                disableToolbar
+                variant="inline"
+                format="MM/dd/yyyy"
+                margin="normal"
+                id="date-picker-inline"
+                label="Date picker inline"
+                value={state.appointment_date}
+                onChange={handleDateChange}
+                KeyboardButtonProps={{
+                  "aria-label": "change date"
+                }}
+              />
+
+              <KeyboardTimePicker
+                margin="normal"
+                id="time-picker"
+                label="Time picker"
+                value={state.appointment_date}
+                onChange={handleDateChange}
+                KeyboardButtonProps={{
+                  "aria-label": "change time"
+                }}
+              />
+            </MuiPickersUtilsProvider>
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={props.handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleClickOpen} color="primary">
+            Confrim
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <UpdateSnack open={open} handleClose={handleClose} />
     </div>
   );
 }
