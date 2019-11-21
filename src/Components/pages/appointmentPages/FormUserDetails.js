@@ -7,6 +7,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
+import axios from "axios";
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
@@ -30,6 +31,12 @@ const styles = {
 };
 
 class FormUserDetails extends Component {
+
+  constructor(props) {
+    super(props);
+    console.log(this.props)
+  }
+
   continue = e => {
     e.preventDefault();
     this.props.nextStep();
@@ -37,7 +44,19 @@ class FormUserDetails extends Component {
 
   render() {
     const { classes } = this.props;
-    const { values, handleChange, handleDateChange } = this.props;
+    const { values, handleChange, handleDateChange, bookedDates } = this.props;
+
+    const disableWeekends = (date) => {
+      let blocked = false
+      bookedDates.map(apps => {
+        if (apps.getDate() === date.getDate())
+          if (apps.getMonth() === date.getMonth())
+            blocked = true;
+      }
+      );
+      return blocked//props.bookedDates.includes(date) //|| date.getDay() === 0 || date.getDay() === 6;
+    }
+
     return (
       <div>
         <Grid className={classes.Grid} container spacing={1}>
@@ -82,8 +101,10 @@ class FormUserDetails extends Component {
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Grid item xs={6}>
               <KeyboardDatePicker
+                shouldDisableDate={disableWeekends}
+                minDate={new Date()}
                 className={classes.dates}
-                disableToolbar
+                // disableToolbar
                 format="MM/dd/yyyy"
                 margin="normal"
                 id="date-picker-inline"

@@ -12,6 +12,7 @@ import { orange } from "@material-ui/core/colors";
 
 export default class UserForm extends Component {
   state = {
+    bookedDates: [new Date],
     doc_id: "",
     step: 1,
     price: 0,
@@ -182,6 +183,8 @@ export default class UserForm extends Component {
 
   render() {
     const { step } = this.state;
+    const { bookedDates } = this.state;
+
     const {
       firstName,
       lastName,
@@ -209,6 +212,12 @@ export default class UserForm extends Component {
       Appid
     };
 
+    axios
+      .get("https://vast-wave-57983.herokuapp.com/api/items")
+      .then(res => {
+        this.setState({ bookedDates: res.data.map(item => new Date(item.appointment_date)) }); //gets the dates
+      });
+
     switch (step) {
       case 1:
         return (
@@ -221,6 +230,7 @@ export default class UserForm extends Component {
             />
 
             <FormUserDetails
+              bookedDates={this.state.bookedDates}
               nextStep={this.nextStep}
               handleDateChange={this.handleDateChange}
               handleChange={this.handleChange}

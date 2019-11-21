@@ -8,11 +8,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
-
-
-
 import UpdateSnack from "./updatesnack";
-
 import DateFnsUtils from "@date-io/date-fns";
 
 import {
@@ -20,6 +16,8 @@ import {
   KeyboardTimePicker,
   KeyboardDatePicker
 } from "@material-ui/pickers";
+
+import { ListItemSecondaryAction } from "@material-ui/core";
 
 export default function FormDialog(props) {
 
@@ -32,6 +30,7 @@ export default function FormDialog(props) {
   // updates the state after the component is rendered so the state isn't blank
   useEffect(() => {
     setState(props.appointment)
+    console.log(props.bookedDates)
   }, [props.appointment]);
 
 
@@ -40,6 +39,17 @@ export default function FormDialog(props) {
   };
 
   //const [firt, setFirst] = React.useState("john"); //props.appointment.first_name);
+
+  function disableWeekends(date) {
+    let blocked = false
+    props.bookedDates.map(apps => {
+      if (apps.getDate() === date.getDate())
+        if (apps.getMonth() === date.getMonth())
+          blocked = true;
+    }
+    );
+    return blocked//props.bookedDates.includes(date) //|| date.getDay() === 0 || date.getDay() === 6;
+  }
 
   const handleDateChange = date => {
     try {
@@ -153,8 +163,9 @@ export default function FormDialog(props) {
             />
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <KeyboardDatePicker
-                disableToolbar
                 variant="inline"
+                shouldDisableDate={disableWeekends}
+                minDate={new Date()}
                 format="MM/dd/yyyy"
                 margin="normal"
                 id="date-picker-inline"

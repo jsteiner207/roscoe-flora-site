@@ -63,6 +63,7 @@ export default function Dashboard() {
   const [edit, setEdit] = React.useState(false);
   const [add, setAdd] = React.useState(false);
   const [data, setData] = useState(null);
+  const [bookedDates, setBookedDates] = React.useState(null)
   const [appointment, setAppointment] = React.useState({ n: null });
 
 
@@ -90,6 +91,7 @@ export default function Dashboard() {
     "December"
   ];
 
+
   const editHandleClick = item => {
     setAppointment(item);
     setEdit(true);
@@ -104,7 +106,10 @@ export default function Dashboard() {
   useEffect(() => {
     axios
       .get("https://vast-wave-57983.herokuapp.com/api/items")
-      .then(res => setData(res.data));
+      .then(res => {
+        setData(res.data);
+        setBookedDates(res.data.map(item => new Date(item.appointment_date))); //gets the dates
+      });
   }, []);
 
   if (page === "Appointments")
@@ -125,7 +130,7 @@ export default function Dashboard() {
                   </Typography>
                   <Typography variant="h5" component="h2">
                     {mlist[new Date(item.appointment_date).getMonth()]},{" "}
-                    {new Date(item.appointment_date).getDay()}
+                    {new Date(item.appointment_date).getDate()}
                   </Typography>
                   <Typography className={classes.pos} color="textSecondary">
                     {new Date(item.appointment_date).toLocaleTimeString([], {
@@ -167,6 +172,7 @@ export default function Dashboard() {
         <AppointmentDialog appointment={appointment}
           open={Delete} handleClose={handleClose} />
         <EditAppointment
+          bookedDates={bookedDates}
           open={edit}
           handleClose={handleClose}
           appointment={appointment}
@@ -181,10 +187,7 @@ export default function Dashboard() {
         <DashboardAppbar page={page} setPage={setPage} />
         <CustomerTable />
 
-
       </div>
-
-
     )
   }
   else if (page === "Contact messages") {
@@ -192,10 +195,7 @@ export default function Dashboard() {
       <div className={classes.div}>
         <DashboardAppbar page={page} setPage={setPage} />
         <ContactForm />
-
       </div>
-
-
     )
   }
 }
