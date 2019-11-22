@@ -140,16 +140,16 @@ class FormPersonalDetails extends Component {
                     labelPlacement="start"
                   />
                   <FormControlLabel
-                    value={"off-studio"}
+                    value={"out-of-studio"}
                     onChange={handleChange("location")}
                     control={
                       <Radio
-                        checked={values.location === "off-studio"}
+                        checked={values.location === "out-of-studio"}
                         color="primary"
                         onChange={handleChange("location")}
                       />
                     }
-                    label="off-studio"
+                    label="out-of-studio"
                     labelPlacement="start"
                   />
                 </RadioGroup>

@@ -11,13 +11,13 @@ import axios from "axios";
 import Button from "@material-ui/core/Button";
 import AppointmentDialog from "./dashboardComponents/appointmentDialog";
 import EditAppointment from "./dashboardComponents/editAppointment";
-import AddAppointment from "./dashboardComponents/AddAppointment"
+import AddAppointment from "./dashboardComponents/AddAppointment";
 import DashboardAppbar from "./dashboardComponents/DashboardAppbar";
 import ContactForm from "./dashboardComponents/contactForm";
 import CustomerTable from "./dashboardComponents/customerTable";
-import AddIcon from '@material-ui/icons/Add';
-import Fab from '@material-ui/core/Fab';
-
+import AddIcon from "@material-ui/icons/Add";
+import Fab from "@material-ui/core/Fab";
+import AccountForm from "./dashboardComponents/AccountsForm";
 
 // import AddAppointment from "./dashboardComponents/AddAppointment";
 
@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
     marginBottom: 12
   },
   fab: {
-    position: 'fixed',
+    position: "fixed",
     bottom: theme.spacing(2),
     right: theme.spacing(3)
   },
@@ -57,18 +57,16 @@ const useStyles = makeStyles(theme => ({
 export default function Dashboard() {
   // These are the default values given to the appointment state hook
 
-
-  const [page, setPage] = React.useState("Appointments")
+  const [page, setPage] = React.useState("Appointments");
   const [Delete, setDelete] = React.useState(false);
   const [edit, setEdit] = React.useState(false);
   const [add, setAdd] = React.useState(false);
   const [data, setData] = useState(null);
-  const [bookedDates, setBookedDates] = React.useState(null)
+  const [bookedDates, setBookedDates] = React.useState(null);
   const [appointment, setAppointment] = React.useState({ n: null });
 
-
-  const handleClickDelete = (item) => {
-    setAppointment(item)
+  const handleClickDelete = item => {
+    setAppointment(item);
     setDelete(true);
   };
   const handleClose = () => {
@@ -91,7 +89,6 @@ export default function Dashboard() {
     "December"
   ];
 
-
   const editHandleClick = item => {
     setAppointment(item);
     setEdit(true);
@@ -104,12 +101,10 @@ export default function Dashboard() {
   const classes = useStyles();
 
   useEffect(() => {
-    axios
-      .get("https://vast-wave-57983.herokuapp.com/api/items")
-      .then(res => {
-        setData(res.data);
-        setBookedDates(res.data.map(item => new Date(item.appointment_date))); //gets the dates
-      });
+    axios.get("https://vast-wave-57983.herokuapp.com/api/items").then(res => {
+      setData(res.data);
+      setBookedDates(res.data.map(item => new Date(item.appointment_date))); //gets the dates
+    });
   }, []);
 
   if (page === "Appointments")
@@ -139,7 +134,9 @@ export default function Dashboard() {
                     })}
                   </Typography>
                   <Typography className={classes.pos} color="textSecondary">
-                    {item.location === "in-studio" ? item.location : item.address}
+                    {item.location === "in-studio"
+                      ? item.location
+                      : item.address}
                   </Typography>
                   <Typography variant="body2" component="p">
                     {item.photoshoot_type}
@@ -162,15 +159,20 @@ export default function Dashboard() {
               </Card>
             </div>
           ))}
-        <Fab color="primary" aria-label="add"
+        <Fab
+          color="primary"
+          aria-label="add"
           onClick={addHandleClick}
           className={classes.fab}
-          handleClose={handleClose}>
-
+          handleClose={handleClose}
+        >
           <AddIcon />
         </Fab>
-        <AppointmentDialog appointment={appointment}
-          open={Delete} handleClose={handleClose} />
+        <AppointmentDialog
+          appointment={appointment}
+          open={Delete}
+          handleClose={handleClose}
+        />
         <EditAppointment
           bookedDates={bookedDates}
           open={edit}
@@ -178,7 +180,6 @@ export default function Dashboard() {
           appointment={appointment}
         />
         <AddAppointment open={add} handleClose={handleClose} />
-
       </div>
     );
   else if (page === "Customers") {
@@ -186,16 +187,21 @@ export default function Dashboard() {
       <div className={classes.div}>
         <DashboardAppbar page={page} setPage={setPage} />
         <CustomerTable />
-
       </div>
-    )
-  }
-  else if (page === "Contact messages") {
+    );
+  } else if (page === "Contact messages") {
     return (
       <div className={classes.div}>
         <DashboardAppbar page={page} setPage={setPage} />
         <ContactForm />
       </div>
-    )
+    );
+  } else if (page === "admin accounts") {
+    return (
+      <div className={classes.div}>
+        <DashboardAppbar page={page} setPage={setPage} />
+        <AccountForm />
+      </div>
+    );
   }
 }

@@ -98,6 +98,7 @@ export default function SignInSide() {
             slate: "true"
           });
           localStorage.setItem("loggedIn", loggedIn);
+          localStorage.setItem("user", user)
           setToDashboard(true);
         }
       })

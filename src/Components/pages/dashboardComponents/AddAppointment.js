@@ -7,6 +7,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles } from "@material-ui/core/styles";
+import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
 import UpdateSnack from "./updatesnack";
 import DateFnsUtils from "@date-io/date-fns";
@@ -16,13 +17,12 @@ import {
   KeyboardDatePicker
 } from "@material-ui/pickers";
 export default function FormDialog(props) {
-
-
-
   const [open, setOpen] = React.useState(false);
   const [state, setState] = React.useState({
     first_name: "",
-    last_name: ""
+    last_name: "",
+    location: "in-studio",
+    address: ""
   });
 
   const handleChange = name => event => {
@@ -31,19 +31,16 @@ export default function FormDialog(props) {
 
   const handleDateChange = date => {
     try {
-      setState({ ...state, "appointment_date": date });
+      setState({ ...state, appointment_date: date });
     } catch (err) {
-      console.log(err)
-    };
-  }
+      console.log(err);
+    }
+  };
 
   const handleClickOpen = () => {
-    axios.post(
-      `https://vast-wave-57983.herokuapp.com/api/items/`,
-      state
-    );
+    axios.post(`https://vast-wave-57983.herokuapp.com/api/items/`, state);
     props.handleClose();
-    setOpen(true);   //this is for the snackbar
+    setOpen(true); //this is for the snackbar
   };
 
   const handleClose = () => {
@@ -65,7 +62,6 @@ export default function FormDialog(props) {
   const classes = useStyles();
 
   return (
-
     <div>
       <Dialog
         open={props.open}
@@ -99,7 +95,6 @@ export default function FormDialog(props) {
               margin="normal"
               value={state.email_name}
               onChange={handleChange("email_name")}
-
             />
             <TextField
               className={classes.textField}
@@ -112,33 +107,53 @@ export default function FormDialog(props) {
               className={classes.textField}
               label="Location"
               margin="normal"
+              select
               value={state.location}
               onChange={handleChange("location")}
-            />
+            >
+              <MenuItem value={"in-studio"}>in-studio</MenuItem>
+              <MenuItem value={"out-of-studio"}>out-of-studio</MenuItem>
+            </TextField>
             <TextField
+              value={
+                state.location === "in-studio"
+                  ? "207 England Dr, O'Fallon MO"
+                  : state.address
+              }
+              disabled={state.location === "in-studio" ? true : false}
               className={classes.textField}
               label="Address"
               margin="normal"
-              value={state.address}
               onChange={handleChange("address")}
             />
             <TextField
               className={classes.textField}
               label="Service"
+              select
               margin="normal"
               value={state.photoshoot_type}
               onChange={handleChange("photoshoot_type")}
-
-            />
+            >
+              <MenuItem value={"fashion"}>fashion</MenuItem>
+              <MenuItem value={"headshot"}>headshot</MenuItem>
+              <MenuItem value={"portraiture"}>portraiture</MenuItem>
+            </TextField>
             <TextField
               id="outlined-basic"
               className={classes.textField}
+              select
               label="Dress changes"
               margin="normal"
               value={state.outfit_changes}
               onChange={handleChange("outfit_changes")}
-
-            />
+            >
+              <MenuItem value={0}></MenuItem>
+              <MenuItem value={0}>None</MenuItem>
+              <MenuItem value={1}>One</MenuItem>
+              <MenuItem value={2}>Two</MenuItem>
+              <MenuItem value={3}>Three</MenuItem>
+              <MenuItem value={4}>Four</MenuItem>
+            </TextField>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <KeyboardDatePicker
                 disableToolbar
