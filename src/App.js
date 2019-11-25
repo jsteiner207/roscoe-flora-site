@@ -40,7 +40,7 @@ function App() {
             render={props => (
               <React.Fragment>
                 <Header />
-                <Portfolio />
+                <div class= "container" ><Portfolio /> </div>
               </React.Fragment>
             )}
           />
