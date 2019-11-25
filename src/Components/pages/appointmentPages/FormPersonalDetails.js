@@ -10,8 +10,16 @@ import FormLabel from "@material-ui/core/FormLabel";
 import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
 import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
+import Input from "@material-ui/core/Input";
 
 const styles = {
   Selector: {
@@ -40,7 +48,14 @@ const styles = {
 
 class FormPersonalDetails extends Component {
   state = {
-    open: false
+    open: false,
+    addresses: [],
+    address: "",
+    isError: false,
+    emptyService: "",
+    emptyLoc: "",
+    emptyChanges: "",
+    emptyAddress: ""
   };
 
   // This closes up the selecter for dress changes
@@ -54,10 +69,42 @@ class FormPersonalDetails extends Component {
   };
 
   // This increments the steps opening up the previous form
-  continue = e => {
+  continue = async e => {
     e.preventDefault();
-    this.props.nextStep();
+    await this.setState({
+      isError: false,
+      emptyService: "",
+      emptyLoc: "",
+      emptyChanges: "",
+      emptyAddress: ""
+    });
+    if (this.props.values.adder !== "") {
+    }
+    if (this.props.values.service === "") {
+      this.setState({ emptyService: "Please Select One" });
+      this.setState({ isError: true });
+    }
+    if (this.props.values.location === "") {
+      this.setState({ emptyLoc: "Please Select One" });
+      this.setState({ isError: true });
+    }
+    if (this.props.values.changes === "") {
+      this.setState({ emptyChanges: "Please Select One" });
+      this.setState({ isError: true });
+    }
+    if (
+      !(this.props.values.address.length >= 1) &&
+      this.props.values.location !== "in-studio"
+    ) {
+      this.setState({ emptyAddress: "Please submit at least one Address" });
+      this.setState({ isError: true });
+    }
+    if (!this.state.isError) {
+      console.log(this.state.isError);
+      this.props.nextStep();
+    }
   };
+  //this.props.nextStep();
 
   // This decrements the steps opening up the previous form
   back = e => {
@@ -66,18 +113,24 @@ class FormPersonalDetails extends Component {
   };
 
   render() {
-    const { values, handleChange } = this.props;
+    const def = true;
+    const { values, handleChange, addItem } = this.props;
     const { classes } = this.props;
     return (
       <MuiThemeProvider>
         <div>
           <Grid className={classes.Grid} container spacing={1}>
             <Grid item xs={12}>
-              <FormControl component="fieldset">
+              <FormControl error={this.state.isError} component="fieldset">
                 <FormLabel component="legend">
                   What type of photoshoot are you interested in{" "}
                 </FormLabel>
-                <RadioGroup aria-label="position" name="position" row>
+                <RadioGroup
+                  defaultValu="headshot"
+                  aria-label="position"
+                  name="position"
+                  row
+                >
                   <FormControlLabel
                     onChange={handleChange("service")}
                     value="headshot"
@@ -118,10 +171,11 @@ class FormPersonalDetails extends Component {
                     labelPlacement="Fashion"
                   />
                 </RadioGroup>
+                <FormHelperText error>{this.state.emptyService}</FormHelperText>
               </FormControl>
             </Grid>
             <Grid item xs={12}>
-              <FormControl component="fieldset">
+              <FormControl error={this.state.isError} component="fieldset">
                 <FormLabel component="legend">
                   where would you like your photos taken
                 </FormLabel>
@@ -153,11 +207,52 @@ class FormPersonalDetails extends Component {
                     labelPlacement="start"
                   />
                 </RadioGroup>
+                <FormHelperText error>{this.state.emptyLoc}</FormHelperText>
+              </FormControl>
+            </Grid>
+
+            <List dense={true}>
+              {values.address &&
+                values.address.map(address => (
+                  <ListItem>
+                    <ListItemText primary={address} />
+                  </ListItem>
+                ))}
+            </List>
+
+            <Grid item xs={12}>
+              <FormControl error={this.state.isError}>
+                <InputLabel htmlFor="standard-adornment-password">
+                  Photoshoot Address(s)
+                </InputLabel>
+                <Input
+                  value={
+                    values.location === "in-studio"
+                      ? "207 England Dr, O'Fallon MO"
+                      : values.adder
+                  }
+                  disabled={values.location === "in-studio" ? true : false}
+                  onChange={handleChange("adder")}
+                  id="standard-adornment-password"
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={addItem}
+                        disabled={
+                          values.location === "in-studio" ? true : false
+                        }
+                      >
+                        <AddCircleOutlineIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                />
+                <FormHelperText error>{this.state.emptyAddress}</FormHelperText>
               </FormControl>
             </Grid>
 
             <Grid item xs={12}>
-              <TextField
+              {/* <TextField
                 value={
                   values.location === "in-studio"
                     ? "207 England Dr, O'Fallon MO"
@@ -170,7 +265,14 @@ class FormPersonalDetails extends Component {
                 label="Photoshoot address"
                 defaultValue={values.email}
                 margin="normal"
-              />
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton onClick={this.addItem}>
+                      <AddCircleOutlineIcon />
+                    </IconButton>
+                  </InputAdornment>
+                }
+              /> */}
             </Grid>
             <br />
             <Grid item xs={12}>
@@ -179,6 +281,7 @@ class FormPersonalDetails extends Component {
                   Dress changes
                 </InputLabel>
                 <Select
+                  error={this.state.isError}
                   open={this.state.open}
                   onClose={this.handleClose}
                   onOpen={this.handleOpen}
@@ -192,29 +295,28 @@ class FormPersonalDetails extends Component {
                   <MenuItem value={3}>Three</MenuItem>
                   <MenuItem value={4}>Four</MenuItem>
                 </Select>
+                <FormHelperText error>{this.state.emptyChanges}</FormHelperText>
               </FormControl>
             </Grid>
-
             <TextField
+              error={true}
               id="outlined-basic"
               label="Estimated cost"
               className={classes.estimate}
               margin="normal"
               value={"$" + (150 + 30 * values.changes) + ".00"}
             />
-            <Grid item xs={12}>
-              <TextField
-                className={classes.TextArea}
-                id="outlined-multiline-static"
-                defaultValue={values.specrec}
-                onChange={handleChange("specrec")}
-                label="Special requests"
-                multiline
-                rows="5"
-                margin="normal"
-                variant="outlined"
-              />
-            </Grid>
+            <TextField
+              className={classes.TextArea}
+              id="outlined-multiline-static"
+              defaultValue={values.specrec}
+              onChange={handleChange("specrec")}
+              label="Special requests"
+              multiline
+              rows="5"
+              margin="normal"
+              variant="outlined"
+            />
             <Grid item xs={12}>
               <Button color="secondary" variant="contained" onClick={this.back}>
                 Back

@@ -74,10 +74,11 @@ export default function SignInSide() {
     localStorage.setItem("loggedIn", loggedIn);
   }
 
-
   const [password, setPassword] = React.useState("");
   const [user, setUser] = React.useState("");
   const [toDashboard, setToDashboard] = React.useState(false);
+  const [helper, setHelper] = React.useState("");
+  const [invalid, setInvalid] = React.useState("");
 
   const handleUserChange = e => {
     setUser(e.target.value);
@@ -98,8 +99,11 @@ export default function SignInSide() {
             slate: "true"
           });
           localStorage.setItem("loggedIn", loggedIn);
-          localStorage.setItem("user", user)
+          localStorage.setItem("user", user);
           setToDashboard(true);
+        } else {
+          setInvalid(true);
+          setHelper("Incorrect username or password");
         }
       })
       .catch(err => console.log(err));
@@ -133,6 +137,8 @@ export default function SignInSide() {
             </Typography>
             <form className={classes.form} noValidate>
               <TextField
+                helperText={helper}
+                error={invalid}
                 variant="outlined"
                 margin="normal"
                 value={user}
@@ -146,6 +152,8 @@ export default function SignInSide() {
                 autoFocus
               />
               <TextField
+                helperText={helper}
+                error={invalid}
                 variant="outlined"
                 margin="normal"
                 required

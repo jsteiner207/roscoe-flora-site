@@ -12,7 +12,7 @@ import { orange } from "@material-ui/core/colors";
 
 export default class UserForm extends Component {
   state = {
-    bookedDates: [new Date],
+    bookedDates: [new Date()],
     doc_id: "",
     step: 1,
     price: 0,
@@ -22,7 +22,8 @@ export default class UserForm extends Component {
     service: "",
     changes: "",
     location: "",
-    address: "",
+    address: [],
+    adder: "",
     firstName: "",
     lastName: "",
     email: "",
@@ -109,7 +110,10 @@ export default class UserForm extends Component {
       outfit_changes: this.state.changes,
       photoshoot_type: this.state.service,
       location: this.state.location,
-      address: this.state.address,
+      address:
+        this.state.location === "in-studio"
+          ? "207 England Dr, O'Fallon MO"
+          : this.state.address,
       special_requests: this.state.specrec,
       appointment_date: this.state.appDate,
       appointment_id: this.state.updating
@@ -176,6 +180,13 @@ export default class UserForm extends Component {
     });
   };
 
+  addItem = () => {
+    this.setState({
+      address: [...this.state.address, this.state.adder],
+      adder: ""
+    }); //simple value
+  };
+
   // Handle fields change
   handleChange = input => e => {
     this.setState({ [input]: e.target.value });
@@ -194,6 +205,7 @@ export default class UserForm extends Component {
       specrec,
       changes,
       address,
+      adder,
       location,
       appDate,
       Appid
@@ -207,16 +219,17 @@ export default class UserForm extends Component {
       specrec,
       changes,
       address,
+      adder,
       location,
       appDate,
       Appid
     };
 
-    axios
-      .get("https://vast-wave-57983.herokuapp.com/api/items")
-      .then(res => {
-        this.setState({ bookedDates: res.data.map(item => new Date(item.appointment_date)) }); //gets the dates
-      });
+    axios.get("https://vast-wave-57983.herokuapp.com/api/items").then(res => {
+      this.setState({
+        bookedDates: res.data.map(item => new Date(item.appointment_date))
+      }); //gets the dates
+    });
 
     switch (step) {
       case 1:
@@ -239,10 +252,10 @@ export default class UserForm extends Component {
           </MuiThemeProvider>
         );
       case 2:
-        console.log(this.state);
         return (
           <MuiThemeProvider theme={this.theme}>
             <FormPersonalDetails
+              addItem={this.addItem}
               nextStep={this.nextStep}
               prevStep={this.prevStep}
               handleChange={this.handleChange}
@@ -265,7 +278,7 @@ export default class UserForm extends Component {
       case 4:
         return <Success status={this.state.status} values={values} />;
       default:
-        return <h1>An error has occured :(</h1>
+        return <h1>An error has occured :(</h1>;
     }
   }
 }

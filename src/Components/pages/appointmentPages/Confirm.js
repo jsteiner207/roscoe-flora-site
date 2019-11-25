@@ -18,6 +18,13 @@ const styles = {
   }
 };
 class Confirm extends Component {
+  locators = [
+    "207 England Drive, O'Fallon, M",
+    "1001 North Main Street, O'Fallon, MO",
+    "asdfadfaf",
+    "KMOV, Memorial Drive, St. Louis, MO"
+  ];
+
   continue = e => {
     e.preventDefault();
     // PROCESS FORM //
@@ -80,11 +87,11 @@ class Confirm extends Component {
               </ListItem>
               <ListItem>
                 <ListItemText
-                  primary="address"
+                  primary="Address(s)"
                   secondary={
                     values.location === "in-studio"
                       ? "207 England Dr, O'Fallon MO"
-                      : values.address
+                      : values.address.map(x => x)
                   }
                 />
               </ListItem>
