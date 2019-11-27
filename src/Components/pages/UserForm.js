@@ -12,6 +12,7 @@ import { orange } from "@material-ui/core/colors";
 
 export default class UserForm extends Component {
   state = {
+    maxedAddress: false,
     bookedDates: [new Date()],
     doc_id: "",
     step: 1,
@@ -129,7 +130,7 @@ export default class UserForm extends Component {
     } else {
       // stores the form data in the database
       axios
-        .post(`https://vast-wave-57983.herokuapp.com/api/items`, data)
+        .post(`http://localhost:5000/api/items`, data)
         .then(res => {
           console.log(res);
           console.log(res.data);
@@ -181,10 +182,15 @@ export default class UserForm extends Component {
   };
 
   addItem = () => {
-    this.setState({
-      address: [...this.state.address, this.state.adder],
-      adder: ""
-    }); //simple value
+    if (this.state.address.length <= 3) {
+      if (this.state.adder !== "")
+        this.setState({
+          address: [...this.state.address, this.state.adder],
+          adder: ""
+        }); //simple value
+    } else {
+      this.setState({ maxedAddress: true });
+    }
   };
 
   // Handle fields change
@@ -208,9 +214,11 @@ export default class UserForm extends Component {
       adder,
       location,
       appDate,
-      Appid
+      Appid,
+      maxedAddress
     } = this.state;
     const values = {
+      maxedAddress,
       firstName,
       lastName,
       email,

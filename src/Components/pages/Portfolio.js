@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import AwesomeSlider from "react-awesome-slider";
 import withAutoplay from "react-awesome-slider/dist/autoplay";
 import "react-awesome-slider/dist/styles.css";
+import axios from "axios";
 
 export default function Portfolio() {
   const AutoplaySlider = withAutoplay(AwesomeSlider);
-  
-  
+  const [photos, setPhotos] = React.useState([null]);
+  useEffect(() => {
+    axios.get("https://vast-wave-57983.herokuapp.com/api/images").then(res => {
+      setPhotos(res.data.map(photo => photo.img_url));
+    });
+  }, []);
 
   const slider = (
     <AutoplaySlider
@@ -15,12 +20,7 @@ export default function Portfolio() {
       interval={6000}
       infinite={true}
     >
-      <div data-src="https://i.ibb.co/rHVVp06/2-qk-CCZN2.png" />
-      <div data-src="https://i.ibb.co/pr1cjX4/3-NQIT1-JH.png" />
-      <div data-src="https://i.ibb.co/72J5TPq/4-n-Ubz-YZO.png"/>
-      <div data-src="https://i.ibb.co/86xTPP4/5-n-O8j7c-I.png" />
-      <div data-src="https://i.ibb.co/wgSkbtk/6-i-LJbh7-E.png" />
-      
+      {photos && photos.map(photo => <div data-src={photo} />)}
     </AutoplaySlider>
   );
 

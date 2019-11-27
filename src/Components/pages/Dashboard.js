@@ -8,6 +8,8 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 import axios from "axios";
+import DateFnsUtils from "@date-io/date-fns";
+import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import Button from "@material-ui/core/Button";
 import AppointmentDialog from "./dashboardComponents/appointmentDialog";
 import EditAppointment from "./dashboardComponents/editAppointment";
@@ -18,6 +20,7 @@ import CustomerTable from "./dashboardComponents/customerTable";
 import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
 import AccountForm from "./dashboardComponents/AccountsForm";
+import Contact from "./Contact";
 
 // import AddAppointment from "./dashboardComponents/AddAppointment";
 
@@ -25,8 +28,20 @@ const useStyles = makeStyles(theme => ({
   div: {
     width: "-webkit-fill-available"
   },
+  picker: {
+    padding: 100
+  },
+  Blocked: {
+    borderRadius: 15,
+    backgroundColor: "lightblue",
+    color: "black",
+    minWidth: 275,
+    marginRight: 50,
+    marginTop: 60
+  },
   Card: {
-    backgroundColor: "lightgray",
+    borderRadius: 15,
+    backgroundColor: "lightyellow",
     color: "black",
     minWidth: 275,
     marginRight: 50,
@@ -58,6 +73,7 @@ export default function Dashboard() {
   // These are the default values given to the appointment state hook
 
   const [page, setPage] = React.useState("Appointments");
+  const [date, changeDate] = useState(new Date());
   const [Delete, setDelete] = React.useState(false);
   const [edit, setEdit] = React.useState(false);
   const [add, setAdd] = React.useState(false);
@@ -98,6 +114,20 @@ export default function Dashboard() {
     setAdd(true);
   };
 
+  const blockDate = () => {
+    let data = {
+      last_name: "Blocked",
+      appointment_date: date
+    };
+    axios
+      .post(`https://vast-wave-57983.herokuapp.com/api/items`, data)
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+      })
+      .catch(err => console.log(err));
+  };
+
   const classes = useStyles();
 
   useEffect(() => {
@@ -109,12 +139,38 @@ export default function Dashboard() {
 
   if (page === "Appointments")
     return (
-      <div className={classes.div}>
+      <div
+        container
+        className={classes.div}
+        style={{ display: "inline-block" }}
+      >
         <DashboardAppbar page={page} setPage={setPage} />
+        <div className={classes.picker}>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <DatePicker
+              autoOk
+              orientation="landscape"
+              variant="static"
+              openTo="date"
+              value={date}
+              onChange={changeDate}
+            />
+          </MuiPickersUtilsProvider>
+          <Button color="primary" onClick={blockDate} variant="contained">
+            block
+          </Button>
+          <Button color="primary" variant="outlined">
+            unblock
+          </Button>
+        </div>
         {data &&
           data.map(item => (
             <div key={item._id} style={{ display: "inline-block" }}>
-              <Card className={classes.Card}>
+              <Card
+                className={
+                  item.last_name === "Blocked" ? classes.Blocked : classes.Card
+                }
+              >
                 <CardContent>
                   <Typography
                     className={classes.title}
@@ -145,7 +201,7 @@ export default function Dashboard() {
                   </Typography>
                 </CardContent>
                 <CardActions>
-                  <Button size="small">View</Button>
+                  <Button size="small">Confirm</Button>
                   <IconButton
                     className={classes.right}
                     onClick={() => editHandleClick(item)}
@@ -201,6 +257,13 @@ export default function Dashboard() {
       <div className={classes.div}>
         <DashboardAppbar page={page} setPage={setPage} />
         <AccountForm />
+      </div>
+    );
+  } else {
+    return (
+      <div className={classes.div}>
+        <DashboardAppbar page={page} setPage={setPage} />
+        <Contact />
       </div>
     );
   }

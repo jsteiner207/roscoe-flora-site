@@ -20,6 +20,8 @@ import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import IconButton from "@material-ui/core/IconButton";
 import Input from "@material-ui/core/Input";
+import DeleteIcon from "@material-ui/icons/Delete";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 
 const styles = {
   Selector: {
@@ -216,16 +218,25 @@ class FormPersonalDetails extends Component {
                 values.address.map(address => (
                   <ListItem>
                     <ListItemText primary={address} />
+                    <ListItemSecondaryAction>
+                      <IconButton edge="end">
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
                   </ListItem>
                 ))}
             </List>
 
             <Grid item xs={12}>
-              <FormControl error={this.state.isError}>
+              <FormControl
+                className={classes.location}
+                error={this.state.isError}
+              >
                 <InputLabel htmlFor="standard-adornment-password">
-                  Photoshoot Address(s)
+                  Photoshoot Address(s) Max: 4
                 </InputLabel>
                 <Input
+                  classname={classes.location}
                   value={
                     values.location === "in-studio"
                       ? "207 England Dr, O'Fallon MO"

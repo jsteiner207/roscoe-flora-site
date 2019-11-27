@@ -16,12 +16,14 @@
     "material-ui": "^1.0.0-beta.47",
     "material-ui-pickers": "^2.2.4",
     "node-sass": "^4.13.0",
-    "react": "^16.9.0",
+    "react": "^16.12.0",
     "react-awesome-slider": "^2.1.2",
     "react-bootstrap": "^1.0.0-beta.14",
-    "react-dom": "^16.9.0",
+    "react-dom": "^16.12.0",
     "react-router-dom": "^5.0.1",
-    "react-scripts": "3.1.2"
+    "react-scripts": "3.1.2",
+    "react-toastify": "^5.4.1",
+    "reactstrap": "^8.1.1"
   },
   "scripts": {
     "start": "react-scripts start",

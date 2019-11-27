@@ -4,12 +4,15 @@ import "./App.css";
 import About from "./Components/pages/About";
 import Home from "./Components/pages/Home";
 import Header from "./Components/Header";
-import Portfolio from "./Components/pages/Portfolio";
+// import Portfolio from "./Components/pages/Portfolio";
+import Uploader from "./Components/pages/uploader";
+
 // import Appointment from "./Components/pages/appointment";
 import Contact from "./Components/pages/Contact";
 import Adminlogin from "./Components/pages/adminlogin";
 import Dashboard from "./Components/pages/Dashboard";
 import UserForm from "./Components/pages/UserForm";
+import Portfolio from "./Components/pages/Portfolio";
 
 function App() {
   return (
@@ -40,7 +43,9 @@ function App() {
             render={props => (
               <React.Fragment>
                 <Header />
-                <div class= "container" ><Portfolio /> </div>
+                <div class="container">
+                  <Portfolio />
+                </div>
               </React.Fragment>
             )}
           />

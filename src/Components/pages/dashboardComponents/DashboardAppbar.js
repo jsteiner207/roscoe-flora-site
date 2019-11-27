@@ -83,7 +83,7 @@ export default function MenuAppBar(props) {
           "Appointments",
           "Customers",
           "Contact messages",
-          "Web Editor",
+          "Website Editor",
           "admin accounts"
         ].map((text, index) => (
           <ListItem button key={text} onClick={() => logText(text)}>
@@ -146,7 +146,7 @@ export default function MenuAppBar(props) {
           <Typography>logout</Typography>
           <Switch checked={signed} onChange={handleSignedChange} />
           <Typography variant="h6" className={classes.title}>
-            Scheduled Appointments
+            {props.page}
           </Typography>
           <Typography align="right">{localStorage.getItem("user")}</Typography>
 
