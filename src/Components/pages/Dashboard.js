@@ -23,6 +23,7 @@ import Fab from "@material-ui/core/Fab";
 import AccountForm from "./dashboardComponents/AccountsForm";
 import Contact from "./Contact";
 import Divider from "@material-ui/core/Divider";
+import TabSystem from "./dashboardComponents/web pages/TabSystem";
 
 // import AddAppointment from "./dashboardComponents/AddAppointment";
 
@@ -306,7 +307,7 @@ export default function Dashboard() {
     return (
       <div className={classes.div}>
         <DashboardAppbar page={page} setPage={setPage} />
-        <Contact />
+        <TabSystem />
       </div>
     );
   }

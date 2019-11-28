@@ -29,20 +29,27 @@ export default function AppointmentDialog(props) {
   };
 
   const deleteCard = () => {
-    if (state.confirmed !== "true")
+    if (state.confirmed !== "true") {
       axios
-        .put(`http://localhost:5000/api/items/${state.appointment_id}`, {
-          confirmed: "true"
-        })
+        .put(
+          `https://vast-wave-57983.herokuapp.com/api/items/${state.appointment_id}`,
+          {
+            confirmed: "true"
+          }
+        )
         .then(console.log("success"))
         .catch(err => console.log(err));
-    else
+    } else {
       axios
-        .put(`http://localhost:5000/api/items/${state.appointment_id}`, {
-          confirmed: "false"
-        })
+        .put(
+          `https://vast-wave-57983.herokuapp.com/api/items/${state.appointment_id}`,
+          {
+            confirmed: "false"
+          }
+        )
         .then(console.log("success"))
         .catch(err => console.log(err));
+    }
   };
 
   return (

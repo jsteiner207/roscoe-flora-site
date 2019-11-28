@@ -11,6 +11,9 @@ import axios from "axios";
 import UpdateSnack from "./updatesnack";
 export default function FormDialog(props) {
   const [open, setOpen] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [current, setCurrent] = React.useState("");
+  const [match, setMatch] = React.useState("");
   const username = localStorage.getItem("user");
   const [state, setState] = React.useState({
     password: "",
@@ -34,12 +37,22 @@ export default function FormDialog(props) {
             console.log("password correct");
             props.handleClose();
             setOpen(true);
+            axios.put(
+              `https://vast-wave-57983.herokuapp.com/api/accounts/${username}`,
+              state
+            );
+          } else {
+            //wrong password
+            setError(true);
+            setCurrent("Invalid Password");
           }
-          //axios.put(`https://vast-wave-57983.herokuapp.com/api/accounts/${username}`, state);
-          else console.log("wrong password");
         });
+
       //this is for the snackbar
-    } else console.log("didn't work my guy");
+    } else {
+      setError(true);
+      setMatch("Passwords don't match");
+    }
   };
 
   const handleClose = () => {
@@ -79,12 +92,16 @@ export default function FormDialog(props) {
               className={classes.textField}
               label="Current Password"
               margin="normal"
+              error={error}
+              helperText={current}
               value={state.password}
               onChange={handleChange("password")}
             />
             <TextField
               className={classes.textField}
               label="New Password"
+              error={error}
+              helperText={match}
               margin="normal"
               value={state.pass_2}
               onChange={handleChange("pass_2")}
@@ -92,6 +109,8 @@ export default function FormDialog(props) {
             <TextField
               className={classes.textField}
               label="Confirm New Password"
+              error={error}
+              helperText={match}
               margin="normal"
               value={state.pass_3}
               onChange={handleChange("pass_3")}
