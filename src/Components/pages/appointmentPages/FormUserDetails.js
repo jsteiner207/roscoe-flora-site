@@ -106,6 +106,10 @@ class FormUserDetails extends Component {
       this.setState({ emptysecond: "Last Name Required" });
       this.setState({ isError: true });
     }
+    if (this.props.values.lastName === "Blocked") {
+      this.setState({ emptysecond: "Nice try :)" });
+      this.setState({ isError: true });
+    }
     if (this.props.values.email.indexOf("@") === -1) {
       this.setState({ emptyEmail: "Valid Email Required" });
       this.setState({ isError: true });

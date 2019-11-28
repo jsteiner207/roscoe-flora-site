@@ -13,6 +13,7 @@ import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import Button from "@material-ui/core/Button";
 import AppointmentDialog from "./dashboardComponents/appointmentDialog";
 import EditAppointment from "./dashboardComponents/editAppointment";
+import ConfirmDialog from "./dashboardComponents/confirmDialog";
 import AddAppointment from "./dashboardComponents/AddAppointment";
 import DashboardAppbar from "./dashboardComponents/DashboardAppbar";
 import ContactForm from "./dashboardComponents/contactForm";
@@ -21,6 +22,7 @@ import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
 import AccountForm from "./dashboardComponents/AccountsForm";
 import Contact from "./Contact";
+import Divider from "@material-ui/core/Divider";
 
 // import AddAppointment from "./dashboardComponents/AddAppointment";
 
@@ -30,6 +32,24 @@ const useStyles = makeStyles(theme => ({
   },
   picker: {
     padding: 100
+  },
+
+  Past: {
+    borderRadius: 15,
+    backgroundColor: "pink",
+    color: "black",
+    minWidth: 275,
+    marginRight: 50,
+    marginTop: 60
+  },
+
+  Confirmed: {
+    borderRadius: 15,
+    backgroundColor: "lightgreen",
+    color: "black",
+    minWidth: 275,
+    marginRight: 50,
+    marginTop: 60
   },
   Blocked: {
     borderRadius: 15,
@@ -41,7 +61,7 @@ const useStyles = makeStyles(theme => ({
   },
   Card: {
     borderRadius: 15,
-    backgroundColor: "lightyellow",
+    backgroundColor: "yellow",
     color: "black",
     minWidth: 275,
     marginRight: 50,
@@ -75,11 +95,19 @@ export default function Dashboard() {
   const [page, setPage] = React.useState("Appointments");
   const [date, changeDate] = useState(new Date());
   const [Delete, setDelete] = React.useState(false);
+  const [confirm, setConfirm] = React.useState(false);
   const [edit, setEdit] = React.useState(false);
   const [add, setAdd] = React.useState(false);
   const [data, setData] = useState(null);
   const [bookedDates, setBookedDates] = React.useState(null);
   const [appointment, setAppointment] = React.useState({ n: null });
+
+  const todaysDate = new Date();
+
+  const handleClickConfirm = item => {
+    setAppointment(item);
+    setConfirm(true);
+  };
 
   const handleClickDelete = item => {
     setAppointment(item);
@@ -89,6 +117,7 @@ export default function Dashboard() {
     setDelete(false);
     setEdit(false);
     setAdd(false);
+    setConfirm(false);
   };
   const mlist = [
     "January",
@@ -154,21 +183,26 @@ export default function Dashboard() {
               openTo="date"
               value={date}
               onChange={changeDate}
+              j
             />
           </MuiPickersUtilsProvider>
           <Button color="primary" onClick={blockDate} variant="contained">
             block
           </Button>
-          <Button color="primary" variant="outlined">
-            unblock
-          </Button>
+          <Divider />
         </div>
         {data &&
           data.map(item => (
             <div key={item._id} style={{ display: "inline-block" }}>
               <Card
                 className={
-                  item.last_name === "Blocked" ? classes.Blocked : classes.Card
+                  new Date(item.appointment_date) < todaysDate
+                    ? classes.Past
+                    : item.last_name === "Blocked"
+                    ? classes.Blocked
+                    : item.confirmed === "true"
+                    ? classes.Confirmed
+                    : classes.Card
                 }
               >
                 <CardContent>
@@ -197,11 +231,15 @@ export default function Dashboard() {
                   <Typography variant="body2" component="p">
                     {item.photoshoot_type}
                     <br />
-                    {"Dress changes: " + item.outfit_changes}
+                    {item.last_name !== "Blocked"
+                      ? "Dress changes: " + item.outfit_changes
+                      : ""}
                   </Typography>
                 </CardContent>
                 <CardActions>
-                  <Button size="small">Confirm</Button>
+                  <Button onClick={() => handleClickConfirm(item)} size="small">
+                    {item.confirmed !== "true" ? "confirm" : "unconfirm"}
+                  </Button>
                   <IconButton
                     className={classes.right}
                     onClick={() => editHandleClick(item)}
@@ -227,6 +265,11 @@ export default function Dashboard() {
         <AppointmentDialog
           appointment={appointment}
           open={Delete}
+          handleClose={handleClose}
+        />
+        <ConfirmDialog
+          appointment={appointment}
+          open={confirm}
           handleClose={handleClose}
         />
         <EditAppointment

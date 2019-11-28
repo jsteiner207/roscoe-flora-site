@@ -28,12 +28,21 @@ export default function AppointmentDialog(props) {
     setOpen(false);
   };
 
-  // deletes item in the database
   const deleteCard = () => {
-    axios
-      .delete(`https://vast-wave-57983.herokuapp.com/api/items/${state}`)
-      .then(console.log("success"))
-      .catch(err => console.log(err));
+    if (state.confirmed !== "true")
+      axios
+        .put(`http://localhost:5000/api/items/${state.appointment_id}`, {
+          confirmed: "true"
+        })
+        .then(console.log("success"))
+        .catch(err => console.log(err));
+    else
+      axios
+        .put(`http://localhost:5000/api/items/${state.appointment_id}`, {
+          confirmed: "false"
+        })
+        .then(console.log("success"))
+        .catch(err => console.log(err));
   };
 
   return (
@@ -43,7 +52,11 @@ export default function AppointmentDialog(props) {
         appointment={props.appointment}
         onClose={props.handleClose}
       >
-        <DialogTitle>{"Remove this appointment?"}</DialogTitle>
+        <DialogTitle>
+          {state.confirmed !== "true"
+            ? "Confirm this appointment?"
+            : "Unconfirm this appointment"}
+        </DialogTitle>
         <DialogActions>
           <Button onClick={props.handleClose} color="primary">
             Cancel
