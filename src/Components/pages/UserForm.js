@@ -130,7 +130,7 @@ export default class UserForm extends Component {
     } else {
       // stores the form data in the database
       axios
-        .post(`http://localhost:5000/api/items`, data)
+        .post(`https://vast-wave-57983.herokuapp.com/api/items`, data)
         .then(res => {
           console.log(res);
           console.log(res.data);

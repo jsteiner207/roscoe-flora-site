@@ -32,7 +32,10 @@ const useStyles = makeStyles(theme => ({
     width: "-webkit-fill-available"
   },
   picker: {
-    padding: 100
+    padding: 20,
+    align: "center",
+    width: "fit-content",
+    margin: "auto"
   },
 
   Past: {
@@ -175,23 +178,34 @@ export default function Dashboard() {
         style={{ display: "inline-block" }}
       >
         <DashboardAppbar page={page} setPage={setPage} />
-        <div className={classes.picker}>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <div className={classes.picker} align="center">
+          <MuiPickersUtilsProvider
+            inputStyle={{ color: "red" }}
+            style={{ width: "fit-content" }}
+            className={classes.picker}
+            utils={DateFnsUtils}
+            align="center"
+          >
             <DatePicker
+              className={classes.picker}
+              align="center"
               autoOk
               orientation="landscape"
               variant="static"
               openTo="date"
               value={date}
               onChange={changeDate}
-              j
             />
           </MuiPickersUtilsProvider>
+        </div>
+        <div style={{ paddingBottom: 15 }}>
           <Button color="primary" onClick={blockDate} variant="contained">
             block
           </Button>
-          <Divider />
         </div>
+
+        <Divider />
+
         {data &&
           data.map(item => (
             <div key={item._id} style={{ display: "inline-block" }}>

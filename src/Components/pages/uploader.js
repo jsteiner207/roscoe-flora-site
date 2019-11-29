@@ -24,7 +24,7 @@ export default function Portfolio() {
     setLoading(false);
 
     //   axios
-    //   .("http://localhost:5000/api/images", data)
+    //   .("https://vast-wave-57983.herokuapp.com/api/images", data)
     //   .then(res => console.log(res.data))
     //   .catch(err => console.log(err));
   };
@@ -35,7 +35,7 @@ export default function Portfolio() {
     };
 
     axios
-      .post("http://localhost:5000/api/images", data)
+      .post("https://vast-wave-57983.herokuapp.com/api/images", data)
       .then(res => console.log(res.data))
       .catch(err => console.log(err));
   };

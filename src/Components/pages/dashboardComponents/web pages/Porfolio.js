@@ -1,17 +1,39 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Button from "@material-ui/core/Button";
+import Divider from "@material-ui/core/Divider";
+import Input from "@material-ui/core/Input";
 
 export default function Portfolio() {
   const [image, setImage] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [id, setId] = React.useState("");
   const [photos, setPhotos] = React.useState([null]);
+  const [pubid, setPubid] = React.useState([null]);
+  const [info, setInfo] = React.useState([]);
+
+  var files = [];
+
+  const deleteImage = index => {
+    axios
+      .post("https://vast-wave-57983.herokuapp.com/api/images/delete", { pub_id: pubid[index] })
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => console.log(err));
+  };
 
   const uploadImage = async e => {
-    const files = e.target.files;
+    files = e.target.files;
+    setImage(URL.createObjectURL(files[0]));
+    console.log(files);
+    setInfo(files);
+  };
+
+  const storeImage = async () => {
     const data = new FormData();
-    data.append("file", files[0]);
+    data.append("file", info[0]);
     data.append("upload_preset", "darwin");
-    setLoading(true);
+    console.log(data);
     const res = await fetch(
       "https://api.cloudinary.com/v1_1/dtdzxszok/image/upload",
       {
@@ -21,22 +43,15 @@ export default function Portfolio() {
     );
 
     const file = await res.json();
-    setImage(file.secure_url);
-    setLoading(false);
-
-    //   axios
-    //   .("http://localhost:5000/api/images", data)
-    //   .then(res => console.log(res.data))
-    //   .catch(err => console.log(err));
-  };
-
-  const storeImage = () => {
-    let data = {
-      img: image
+    console.table(file);
+    await setId(file.public_id);
+    let clouddata = {
+      img: file.url,
+      pub_id: id
     };
 
     axios
-      .post("https://vast-wave-57983.herokuapp.com/api/images", data)
+      .post("https://vast-wave-57983.herokuapp.com/api/images", clouddata)
       .then(res => console.log(res.data))
       .catch(err => console.log(err));
   };
@@ -44,29 +59,46 @@ export default function Portfolio() {
   useEffect(() => {
     axios.get("https://vast-wave-57983.herokuapp.com/api/images").then(res => {
       setPhotos(res.data.map(photo => photo.img_url));
+      setPubid(res.data.map(photo => photo.pub_id));
     });
   }, []);
 
   return (
     <div>
       <h1>Upload image</h1>
-      <input
-        type="file"
-        name="file"
-        placeholder="upload an image"
-        onChange={uploadImage}
-      />
+      <div style={{ padding: 10 }}>
+        <Button variant="contained" color="primary">
+          <input type="file" name="file" onChange={uploadImage} />
+        </Button>
+      </div>
 
-      {loading ? (
-        <h3>loading..</h3>
-      ) : (
-        <img src={image} style={{ width: "300px" }} />
-      )}
-      <button onClick={storeImage}>click to store</button>
+      <br />
+
+      <img src={image} style={{ width: "300px" }} />
+      <br />
+      {image !== "" ? (
+        <div style={{ padding: 10 }}>
+          <Button color="Primary" variant="outlined" onClick={storeImage}>
+            click to store
+          </Button>
+        </div>
+      ) : null}
+
+      <Divider />
 
       {photos &&
-        photos.map(photo => (
-          <img src={photo} style={{ width: 100, height: 100, padding: 40 }} />
+        photos.map((photo, i) => (
+          <React.Fragment>
+            <Button
+              onClick={() => deleteImage(i)}
+              color="secondary"
+              variant="outlined"
+            >
+              delete
+            </Button>
+            <img src={photo} style={{ width: 200, height: 200, padding: 10 }} />
+            <br />
+          </React.Fragment>
         ))}
     </div>
   );
