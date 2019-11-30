@@ -2,6 +2,7 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
+import axios from "axios";
 // import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 // import{
 //     faInstagram,
@@ -30,6 +31,18 @@ class Contact extends React.Component {
     });
   };
 
+  storeContact = () => {
+    let data = {
+      full_name: this.state.name,
+      email: this.state.email,
+      message: this.state.message
+    };
+
+    axios
+      .post("https://vast-wave-57983.herokuapp.com/api/contacts", data)
+      .then(res => console.log(res.data));
+  };
+
   handleSubmit = event => {
     event.preventDefault();
 
@@ -38,6 +51,7 @@ class Contact extends React.Component {
     });
   };
 
+  // cyclically flushes out the dom
   render() {
     return (
       <div style={linkstyle}>
@@ -84,6 +98,7 @@ class Contact extends React.Component {
               variant="primary"
               type="submit"
               disabled={this.state.disabled}
+              onClick={this.storeContact}
             >
               Send
             </Button>
