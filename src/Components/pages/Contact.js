@@ -31,7 +31,17 @@ class Contact extends React.Component {
     });
   };
 
-  storeContact = () => {
+  // storeContact = () => {
+
+  // };
+
+  handleSubmit = event => {
+    event.preventDefault();
+
+    this.setState({
+      disabled: true
+    });
+
     let data = {
       full_name: this.state.name,
       email: this.state.email,
@@ -41,14 +51,6 @@ class Contact extends React.Component {
     axios
       .post("https://vast-wave-57983.herokuapp.com/api/contacts", data)
       .then(res => console.log(res.data));
-  };
-
-  handleSubmit = event => {
-    event.preventDefault();
-
-    this.setState({
-      disabled: true
-    });
   };
 
   // cyclically flushes out the dom
@@ -98,7 +100,7 @@ class Contact extends React.Component {
               variant="primary"
               type="submit"
               disabled={this.state.disabled}
-              onClick={this.storeContact}
+              //onClick={this.storeContact}
             >
               Send
             </Button>
