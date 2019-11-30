@@ -22,6 +22,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Input from "@material-ui/core/Input";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import axios from "axios";
 
 const styles = {
   Selector: {
@@ -57,8 +58,15 @@ class FormPersonalDetails extends Component {
     emptyService: "",
     emptyLoc: "",
     emptyChanges: "",
-    emptyAddress: ""
+    emptyAddress: "",
+    prices: []
   };
+
+  componentWillMount() {
+    axios
+      .get("http://localhost:5000/api/prices")
+      .then(res => this.setState({ prices: res.data[0] }));
+  }
 
   // This closes up the selecter for dress changes
   handleClose = () => {
@@ -69,6 +77,8 @@ class FormPersonalDetails extends Component {
   handleOpen = () => {
     this.setState({ open: true });
   };
+
+  removeAddress = index => this.props.values.address.splice(index, 1);
 
   // This increments the steps opening up the previous form
   continue = async e => {
@@ -118,6 +128,31 @@ class FormPersonalDetails extends Component {
     const def = true;
     const { values, handleChange, addItem } = this.props;
     const { classes } = this.props;
+    var servicePrice =
+      values.service === "portraiture"
+        ? this.state.prices.portraiture // if portraiture use portraits price
+        : values.service === "fashion"
+        ? this.state.prices.fashion // if portraiture use fashions price
+        : values.service === "headshot"
+        ? this.state.prices.headshot
+        : 0;
+    var changesPrice =
+      values.changes <= this.state.prices.freechange // checks if changes is in the free zone
+        ? 0 //if they are don't charge them
+        : (values.changes - this.state.prices.freechange) *
+          this.state.prices.dresschanges; // adds in dresschange fee
+
+    var locationPrice =
+      values.location === "in-studio"
+        ? this.state.prices.instudio
+        : values.location === "out-of-studio"
+        ? values.address.length <= this.state.prices.freelocation
+          ? this.state.prices.outstudio
+          : (values.address.length - this.state.prices.freelocation) *
+              this.state.prices.location +
+            this.state.prices.outstudio
+        : 0;
+
     return (
       <MuiThemeProvider>
         <div>
@@ -215,11 +250,14 @@ class FormPersonalDetails extends Component {
 
             <List dense={true}>
               {values.address &&
-                values.address.map(address => (
+                values.address.map((address, i) => (
                   <ListItem>
                     <ListItemText primary={address} />
                     <ListItemSecondaryAction>
-                      <IconButton edge="end">
+                      <IconButton
+                        onClick={() => this.removeAddress(i)}
+                        edge="end"
+                      >
                         <DeleteIcon />
                       </IconButton>
                     </ListItemSecondaryAction>
@@ -315,7 +353,9 @@ class FormPersonalDetails extends Component {
               label="Estimated cost"
               className={classes.estimate}
               margin="normal"
-              value={"$" + (150 + 30 * values.changes) + ".00"}
+              value={
+                "$" + (locationPrice + changesPrice + servicePrice) + ".00"
+              }
             />
             <TextField
               className={classes.TextArea}

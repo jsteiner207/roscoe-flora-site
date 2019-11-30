@@ -21,7 +21,7 @@ import CustomerTable from "./dashboardComponents/customerTable";
 import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
 import AccountForm from "./dashboardComponents/AccountsForm";
-import Contact from "./Contact";
+import Pricing from "./dashboardComponents/Pricing";
 import Divider from "@material-ui/core/Divider";
 import TabSystem from "./dashboardComponents/web pages/TabSystem";
 
@@ -301,6 +301,14 @@ export default function Dashboard() {
       <div className={classes.div}>
         <DashboardAppbar page={page} setPage={setPage} />
         <CustomerTable />
+      </div>
+    );
+  } else if (page === "Pricing") {
+    // pricing component
+    return (
+      <div className={classes.div}>
+        <DashboardAppbar page={page} setPage={setPage} />
+        <Pricing />
       </div>
     );
   } else if (page === "Contact messages") {

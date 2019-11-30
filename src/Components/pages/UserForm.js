@@ -240,7 +240,7 @@ export default class UserForm extends Component {
     });
 
     switch (step) {
-      case 1:
+      case 2:
         return (
           <MuiThemeProvider theme={this.theme}>
             <Reschedule
@@ -259,7 +259,7 @@ export default class UserForm extends Component {
             />
           </MuiThemeProvider>
         );
-      case 2:
+      case 1:
         return (
           <MuiThemeProvider theme={this.theme}>
             <FormPersonalDetails

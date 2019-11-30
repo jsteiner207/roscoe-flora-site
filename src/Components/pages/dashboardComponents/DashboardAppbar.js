@@ -82,6 +82,7 @@ export default function MenuAppBar(props) {
         {[
           "Appointments",
           "Customers",
+          "Pricing",
           "Contact messages",
           "Website Editor",
           "admin accounts"
