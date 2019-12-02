@@ -41,7 +41,15 @@ const useStyles = makeStyles(theme => ({
 export default function Pricing() {
   const classes = useStyles();
   const [state, setState] = React.useState({
-    headshot: 80
+    headshot: 0,
+    portraiture: 0,
+    fashion: 0,
+    instudio: 0,
+    outstudio: 0,
+    location: 0,
+    dresschanges: 0,
+    freelocation: 0,
+    freechange: 0
   });
 
   const handleChange = name => event => {
@@ -52,9 +60,9 @@ export default function Pricing() {
     axios.post("https://vast-wave-57983.herokuapp.com/api/prices", state);
   };
 
-  useEffect(async () => {
+  useEffect(() => {
     axios
-      .get("http://localhost:5000/api/prices")
+      .get("https://vast-wave-57983.herokuapp.com/api/prices")
       .then(res => setState(res.data[0]));
   }, []);
 
@@ -76,7 +84,6 @@ export default function Pricing() {
               <input
                 onChange={handleChange("headshot")}
                 type="number"
-                min="0.01"
                 value={state.headshot}
               />
             </StyledTableCell>
@@ -89,7 +96,6 @@ export default function Pricing() {
               <input
                 onChange={handleChange("portraiture")}
                 type="number"
-                min="0.01"
                 value={state.portraiture}
               />
             </StyledTableCell>
@@ -102,7 +108,6 @@ export default function Pricing() {
               <input
                 onChange={handleChange("fashion")}
                 type="number"
-                min="0.01"
                 value={state.fashion}
               />
             </StyledTableCell>
@@ -115,7 +120,6 @@ export default function Pricing() {
               <input
                 onChange={handleChange("instudio")}
                 type="number"
-                min="0.01"
                 value={state.instudio}
               />
             </StyledTableCell>
@@ -128,7 +132,6 @@ export default function Pricing() {
               <input
                 onChange={handleChange("outstudio")}
                 type="number"
-                min="0.01"
                 value={state.outstudio}
               />
             </StyledTableCell>
@@ -141,7 +144,6 @@ export default function Pricing() {
               <input
                 onChange={handleChange("dresschanges")}
                 type="number"
-                min="0.01"
                 value={state.dresschanges}
               />
             </StyledTableCell>
@@ -149,8 +151,6 @@ export default function Pricing() {
               <input
                 onChange={handleChange("freechange")}
                 value={state.freechange}
-                type="number"
-                min="0"
               />
             </StyledTableCell>
           </StyledTableRow>
@@ -160,7 +160,6 @@ export default function Pricing() {
               <input
                 onChange={handleChange("location")}
                 type="number"
-                min="0"
                 value={state.location}
               />
             </StyledTableCell>
@@ -168,7 +167,6 @@ export default function Pricing() {
               <input
                 onChange={handleChange("freelocation")}
                 type="number"
-                min="0"
                 value={state.freelocation}
               />
             </StyledTableCell>
