@@ -64,7 +64,7 @@ class FormPersonalDetails extends Component {
 
   componentWillMount() {
     axios
-      .get("http://localhost:5000/api/prices")
+      .get("https://vast-wave-57983.herokuapp.com/api/prices")
       .then(res => this.setState({ prices: res.data[0] }));
   }
 

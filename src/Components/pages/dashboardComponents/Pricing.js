@@ -49,7 +49,7 @@ export default function Pricing() {
   };
 
   const updatePrices = () => {
-    axios.post("http://localhost:5000/api/prices", state);
+    axios.post("https://vast-wave-57983.herokuapp.com/api/prices", state);
   };
 
   useEffect(async () => {
