@@ -1,75 +1,175 @@
-import React, { useEffect } from "react";
+import React from "react";
 import axios from "axios";
-import { withStyles, makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
+import MUIDataTable from "mui-datatables";
+import { CircularProgress, Typography } from '@material-ui/core';
+//import { fullBlack } from "material-ui/styles/colors";
 
-const StyledTableCell = withStyles(theme => ({
-  head: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white
-  },
-  body: {
-    fontSize: 14
+class Example extends React.Component {
+
+  state = {
+    page: 0,
+    count: 1,
+    data: [["Loading Data..."]],
+    isLoading: false
+  };
+
+  componentDidMount() {
+    this.getData();
   }
-}))(TableCell);
 
-const StyledTableRow = withStyles(theme => ({
-  root: {
-    "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.background.default
-    }
+  // get data
+  getData = () => {
+    this.setState({ isLoading: true });
+    this.xhrRequest().then(res => {
+      this.setState({ data: res.data, isLoading: false, count: res.total });
+    });
   }
-}))(TableRow);
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    width: "100%",
-    marginTop: theme.spacing(3),
-    overflowX: "auto"
-  },
-  table: {
-    minWidth: 700
+  // mock async function
+  xhrRequest = () => {
+
+    return new Promise((resolve, reject) => {
+      let data=[
+        //{Id : Number ,Name: String,Email:String,Message : String,v: String}
+    
+    ];
+    axios.get('https://vast-wave-57983.herokuapp.com/api/customers')
+          .then(function(response){
+              var setRows=[];
+              
+    
+    
+             setRows.push(response.data);
+             setRows=setRows.find(elementType=> elementType=Array);
+             setRows.forEach(element=> data.push(element))
+             
+              
+                 console.log('data from axiospost ',data);
+                  
+           })
+           .catch(function(error){
+                  console.log(error);
+              });
+           
+    
+    //console.log("this is the data 1step way from axios",data);
+
+      const total = data.length;  // mock record count from server
+       
+      
+
+      setTimeout(() => {
+        resolve({
+          data, total
+        });
+      }, 2500);
+
+    });
+
   }
-}));
 
-export default function CustomizedTables() {
-  const classes = useStyles();
-  const [rows, setRows] = React.useState(null);
+  changePage = (page) => {
+    this.setState({
+      isLoading: true,
+    });
+    this.xhrRequest(`/myApiServer?page=${page}`).then(res => {
+      this.setState({
+        isLoading: false,
+        page: page,
+        data: res.data,
+        count: res.total,
+      });
+    });
+  };
 
-  useEffect(() => {
-    axios
-      .get("https://vast-wave-57983.herokuapp.com/api/customers")
-      .then(res => setRows(res.data));
-  }, []);
+  render() {
 
-  return (
-    <Paper className={classes.root}>
-      <Table className={classes.table} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Last name</StyledTableCell>
-            <StyledTableCell>First Name</StyledTableCell>
-            <StyledTableCell>email</StyledTableCell>
-            <StyledTableCell>Phone #</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows &&
-            rows.map(row => (
-              <StyledTableRow key={row.full_name}>
-                <StyledTableCell>{row.last_name}</StyledTableCell>
-                <StyledTableCell>{row.first_name}</StyledTableCell>
-                <StyledTableCell>{row.email_name}</StyledTableCell>
-                <StyledTableCell>{row.phone_number}</StyledTableCell>
-              </StyledTableRow>
-            ))}
-        </TableBody>
-      </Table>
-    </Paper>
-  );
+    const columns = [
+      {
+       name: "first_name",
+       label: "First Name",
+       options: {
+        filter: true,
+        sort: true,
+       }
+      },
+      {
+        name: "last_name",
+        label: "Last Name",
+        options: {
+         filter: true,
+         sort: true,
+        }
+       },
+      {
+       name: "email_name",
+       label: "E-Mail",
+       options: {
+        filter: true,
+        sort: false,
+       }
+      },
+      {
+       name: "phone_number",
+       label: "Phone",
+       options: {
+        filter: true,
+        sort: true,
+       }
+      },{
+        name: "date_scheduled",
+        label: "Last Appointment",
+        options: {
+         filter: true,
+         sort: true,
+        }
+       },
+     ];    var { data, page, count, isLoading } = this.state;
+
+    const options = {
+      
+      filterType: 'checkbox',
+      
+      filter: true,
+      filterType: 'dropdown',
+      responsive: 'scrollMaxHeight',
+      serverSide: false,
+      count: count,
+      page: page,
+      //onRowsDelete ,
+
+   /*    Callback function that triggers when row(s) are deleted. 
+      function(rowsDeleted: object(lookup: {[dataIndex]: boolean}, 
+        data: arrayOfObjects: {index: number, dataIndex: number})) => 
+        void OR false (Returning false prevents row deletion.) */
+      
+      
+      
+      
+        onTableChange: (action, tableState) => {
+
+        console.log(action, tableState);
+        // a developer could react to change on an action basis or
+        // examine the state as a whole and do whatever they want
+
+        switch (action) {
+          case 'changePage':
+            this.changePage(tableState.page);
+            break;
+        }
+      }
+    };
+    return (
+      <div>
+        <MUIDataTable title={<Typography variant="title">
+          
+          {isLoading && <CircularProgress size={24} style={{marginLeft: 15, position: 'relative', top: 4}} />}
+          </Typography>
+          } data={data} columns={columns} options={options} />
+      </div>
+    );
+
+  }
 }
+
+export default Example;

@@ -13,6 +13,7 @@ import Adminlogin from "./Components/pages/adminlogin";
 import Dashboard from "./Components/pages/Dashboard";
 import UserForm from "./Components/pages/UserForm";
 import Portfolio from "./Components/pages/Portfolio";
+import Service from "./Components/Services";
 
 function App() {
   return (
@@ -26,6 +27,16 @@ function App() {
               <React.Fragment>
                 <Header />
                 <Home />
+              </React.Fragment>
+            )}
+          />
+           <Route
+            exact
+            path="/Services"
+            render={props => (
+              <React.Fragment>
+                <Header />
+                <Service />
               </React.Fragment>
             )}
           />
