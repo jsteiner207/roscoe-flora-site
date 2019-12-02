@@ -14,6 +14,7 @@ import Dashboard from "./Components/pages/Dashboard";
 import UserForm from "./Components/pages/UserForm";
 import Portfolio from "./Components/pages/Portfolio";
 import Service from "./Components/Services";
+import SocialMedia from "./Components/SocialMedia.js";
 
 function App() {
   return (
@@ -27,6 +28,8 @@ function App() {
               <React.Fragment>
                 <Header />
                 <Home />
+                <div><SocialMedia/></div>
+                
               </React.Fragment>
             )}
           />
@@ -37,6 +40,7 @@ function App() {
               <React.Fragment>
                 <Header />
                 <Service />
+                <SocialMedia/>
               </React.Fragment>
             )}
           />
@@ -46,6 +50,7 @@ function App() {
               <React.Fragment>
                 <Header />
                 <About />
+                <SocialMedia/>
               </React.Fragment>
             )}
           />
@@ -54,9 +59,12 @@ function App() {
             render={props => (
               <React.Fragment>
                 <Header />
-                <div class="container">
+                <div className="container">
                   <Portfolio />
                 </div>
+                <hr class="between" />
+                <hr class="between" />
+                <div className="container" style={{ marginTop: '10' }}><SocialMedia/></div>
               </React.Fragment>
             )}
           />
@@ -76,6 +84,7 @@ function App() {
                 <Header />
                 {/* <Appointment/> */}
                 <UserForm />
+                <SocialMedia/>
               </React.Fragment>
             )}
           />
