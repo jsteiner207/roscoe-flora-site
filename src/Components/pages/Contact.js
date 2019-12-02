@@ -55,9 +55,9 @@ class Contact extends React.Component {
       message: this.state.message
     };
 
-    // axios
-    //   .post("https://vast-wave-57983.herokuapp.com/api/contacts", data)
-    //   .then(res => console.log(res.data));
+    axios
+      .post("https://vast-wave-57983.herokuapp.com/api/contacts", data)
+      .then(res => console.log(res.data));
   };
 
   // cyclically flushes out the dom
