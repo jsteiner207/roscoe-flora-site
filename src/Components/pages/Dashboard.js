@@ -102,7 +102,7 @@ export default function Dashboard() {
   const [confirm, setConfirm] = React.useState(false);
   const [edit, setEdit] = React.useState(false);
   const [add, setAdd] = React.useState(false);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [bookedDates, setBookedDates] = React.useState(null);
   const [appointment, setAppointment] = React.useState({ n: null });
 
@@ -148,15 +148,16 @@ export default function Dashboard() {
   };
 
   const blockDate = () => {
-    let data = {
+    let daddy = {
       last_name: "Blocked",
       appointment_date: date
     };
     axios
-      .post(`https://vast-wave-57983.herokuapp.com/api/items`, data)
+      .post(`https://vast-wave-57983.herokuapp.com/api/items`, daddy)
       .then(res => {
         console.log(res);
         console.log(res.data);
+        setData([...data, daddy]);
       })
       .catch(err => console.log(err));
   };
@@ -168,7 +169,7 @@ export default function Dashboard() {
       setData(res.data);
       setBookedDates(res.data.map(item => new Date(item.appointment_date))); //gets the dates
     });
-  }, []);
+  }, [data.length]);
 
   if (page === "Appointments")
     return (

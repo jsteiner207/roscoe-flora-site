@@ -1,8 +1,11 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
+import MaterialButton from "@material-ui/core/Button";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
+import { Alert, Row, Col } from "reactstrap";
 import axios from "axios";
+
 // import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 // import{
 //     faInstagram,
@@ -18,9 +21,12 @@ class Contact extends React.Component {
       email: "",
       message: "",
       disabled: false,
-      emailSent: null
+      emailSent: null,
+      visible: false
     };
   }
+
+  onDismiss = () => this.setState({ visible: false });
 
   handleChange = event => {
     const target = event.target;
@@ -39,6 +45,7 @@ class Contact extends React.Component {
     event.preventDefault();
 
     this.setState({
+      visible: true,
       disabled: true
     });
 
@@ -48,16 +55,23 @@ class Contact extends React.Component {
       message: this.state.message
     };
 
-    axios
-      .post("https://vast-wave-57983.herokuapp.com/api/contacts", data)
-      .then(res => console.log(res.data));
+    // axios
+    //   .post("https://vast-wave-57983.herokuapp.com/api/contacts", data)
+    //   .then(res => console.log(res.data));
   };
 
   // cyclically flushes out the dom
   render() {
+    console.log(<p>yeet</p>);
     return (
       <div style={linkstyle}>
+        <Alert color="info" isOpen={this.state.visible} toggle={this.onDismiss}>
+          <h4>Thank you!</h4>Your message has been sent, you should get an email
+          within 2-3 business days
+        </Alert>
         <h1>Contact Us</h1>
+        <p style={{ fontSize: 14 }}>email: mickeyzacom@gmail.com</p>
+        <p style={{ fontSize: 14 }}>phone: 636-279-3432</p>
 
         <Container>
           <Form onSubmit={this.handleSubmit}>
