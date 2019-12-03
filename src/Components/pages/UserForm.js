@@ -41,8 +41,27 @@ export default class UserForm extends Component {
       .then(res => {
         console.log(res.data);
         this.setState({
+          email: res.data.email_name,
+          phone: res.data.phone_number,
+          address: res.data.address,
+          specrec: res.data.special_requests,
           doc_id: res.data._id
         });
+      });
+
+    let data = { email_name: this.state.email };
+
+    axios
+      .post(`https://vast-wave-57983.herokuapp.com/email`, [
+        data,
+        { code: "delete" }
+      ])
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+      })
+      .catch(err => {
+        console.log(err);
       });
 
     axios
@@ -127,6 +146,19 @@ export default class UserForm extends Component {
         `https://vast-wave-57983.herokuapp.com/api/items/${this.state.Appid}`,
         data
       );
+
+      axios
+        .post(`https://vast-wave-57983.herokuapp.com/email`, [
+          data,
+          { code: "update" }
+        ])
+        .then(res => {
+          console.log(res);
+          console.log(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     } else {
       // stores the form data in the database
       axios
@@ -138,7 +170,10 @@ export default class UserForm extends Component {
         .catch(err => console.log(err));
 
       axios
-        .post(`https://vast-wave-57983.herokuapp.com/email`, data)
+        .post(`https://vast-wave-57983.herokuapp.com/email`, [
+          data,
+          { code: "create" }
+        ])
         .then(res => {
           console.log(res);
           console.log(res.data);

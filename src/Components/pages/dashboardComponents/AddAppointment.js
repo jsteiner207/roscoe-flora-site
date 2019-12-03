@@ -22,6 +22,8 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import InputLabel from "@material-ui/core/InputLabel";
 import Input from "@material-ui/core/Input";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import Snackbar from "@material-ui/core/Snackbar";
+import CloseIcon from "@material-ui/icons/Close";
 
 import {
   MuiPickersUtilsProvider,
@@ -58,6 +60,7 @@ export default function FormDialog(props) {
 
   const handleChange = name => event => {
     setState({ ...state, [name]: event.target.value });
+    console.log(state);
   };
 
   const handleDateChange = date => {
@@ -69,6 +72,9 @@ export default function FormDialog(props) {
   };
 
   const handleClickOpen = () => {
+    if (state.address.length === 0) {
+      setState({ ...state, address: ["207 England Dr, O'Fallon MO"] });
+    }
     axios.post(`https://vast-wave-57983.herokuapp.com/api/items/`, state);
     props.handleClose();
     setOpen(true); //this is for the snackbar
@@ -264,7 +270,26 @@ export default function FormDialog(props) {
           </Button>
         </DialogActions>
       </Dialog>
-      <UpdateSnack open={open} handleClose={handleClose} />
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left"
+        }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message={<span id="message-id">Appointment Created</span>}
+        action={[
+          <IconButton
+            key="close"
+            aria-label="close"
+            color="inherit"
+            onClick={handleClose}
+          >
+            <CloseIcon />
+          </IconButton>
+        ]}
+      />{" "}
     </div>
   );
 }

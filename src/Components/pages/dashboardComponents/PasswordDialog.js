@@ -8,7 +8,9 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
-import UpdateSnack from "./updatesnack";
+import Snackbar from "@material-ui/core/Snackbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 export default function FormDialog(props) {
   const [open, setOpen] = React.useState(false);
   const [error, setError] = React.useState(false);
@@ -126,7 +128,26 @@ export default function FormDialog(props) {
           </Button>
         </DialogActions>
       </Dialog>
-      <UpdateSnack open={open} handleClose={handleClose} />
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left"
+        }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message={<span id="message-id">Password Changed</span>}
+        action={[
+          <IconButton
+            key="close"
+            aria-label="close"
+            color="inherit"
+            onClick={handleClose}
+          >
+            <CloseIcon />
+          </IconButton>
+        ]}
+      />
     </div>
   );
 }

@@ -4,6 +4,9 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
+import Snackbar from "@material-ui/core/Snackbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 
 import DeleteSnack from "./deletesnack";
 
@@ -28,8 +31,43 @@ export default function AppointmentDialog(props) {
     setOpen(false);
   };
 
-  const deleteCard = () => {
+  const deleteCard = async () => {
     if (state.confirmed !== "true") {
+      let daddy = {};
+      await axios
+        .get(
+          `https://vast-wave-57983.herokuapp.com/api/items/${state.appointment_id}`
+        )
+        .then(res => {
+          console.log(res.data);
+          daddy = {
+            first_name: res.data.first_name,
+            last_name: res.data.last_name,
+            email_name: res.data.email_name,
+            phone_number: state.phone,
+            outfit_changes: state.changes,
+            photoshoot_type: state.service,
+            location: state.location,
+            address: res.data.address,
+            special_requests: state.specrec,
+            appointment_date: state.appDate
+            //if updating, use default appid. otherwise, make one
+          };
+        });
+
+      axios
+        .post(`https://vast-wave-57983.herokuapp.com/email`, [
+          daddy,
+          { code: "confirm" }
+        ])
+        .then(res => {
+          console.log(res);
+          console.log(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+
       axios
         .put(
           `https://vast-wave-57983.herokuapp.com/api/items/${state.appointment_id}`,
@@ -73,7 +111,32 @@ export default function AppointmentDialog(props) {
           </Button>
         </DialogActions>
       </Dialog>
-      <DeleteSnack open={open} handleClose={handleClose} />
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left"
+        }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message={
+          <span id="message-id">
+            {state.confirmed !== "true"
+              ? "Appointment Confirmed"
+              : "Appointment Unconfirmed"}
+          </span>
+        }
+        action={[
+          <IconButton
+            key="close"
+            aria-label="close"
+            color="inherit"
+            onClick={handleClose}
+          >
+            <CloseIcon />
+          </IconButton>
+        ]}
+      />
     </div>
   );
 }
