@@ -10,6 +10,7 @@ import Form from "react-bootstrap/Form";
 import Divider from "@material-ui/core/Divider";
 import axios from "axios";
 import PropTypes from "prop-types";
+import PDF from "./Creating_an_Appointment.pdf";
 import MaskedInput from "react-text-mask";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -112,7 +113,10 @@ class FormUserDetails extends Component {
       this.setState({ emptysecond: "Nice try :)" });
       this.setState({ isError: true });
     }
-    if (isNull(this.props.values.email.value)||this.props.values.email.indexOf("@") === -1) {
+    if (
+      isNull(this.props.values.email.value) ||
+      this.props.values.email.indexOf("@") === -1
+    ) {
       this.setState({ emptyEmail: "Valid Email Required" });
       this.setState({ isError: true });
     }
@@ -120,10 +124,12 @@ class FormUserDetails extends Component {
       this.setState({ emptyPhone: "Valid Phone Number Required" });
       this.setState({ isError: true });
     }
-    if (isNull(this.props.values.appDate.valueOf())||isNaN(this.props.values.appDate.valueOf())) {
+    if (
+      isNull(this.props.values.appDate.valueOf()) ||
+      isNaN(this.props.values.appDate.valueOf())
+    ) {
       this.setState({ emptyDate: "Invalid Date or Time" });
       this.setState({ isError: true });
-      
     }
     if (!this.state.isError) {
       console.log(this.state.isError);
@@ -250,6 +256,9 @@ class FormUserDetails extends Component {
         >
           Continue
         </Button>
+        <div>
+          <a href={PDF}>Help</a>
+        </div>
       </div>
     );
   }
