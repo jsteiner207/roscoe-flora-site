@@ -39,18 +39,19 @@ export default function AppointmentDialog(props) {
           `https://vast-wave-57983.herokuapp.com/api/items/${state.appointment_id}`
         )
         .then(res => {
-          console.log(res.data);
+          console.log();
           daddy = {
             first_name: res.data.first_name,
             last_name: res.data.last_name,
             email_name: res.data.email_name,
-            phone_number: state.phone,
-            outfit_changes: state.changes,
-            photoshoot_type: state.service,
-            location: state.location,
+            phone_number: res.data.phone_number,
+            outfit_changes: res.data.outfit_changes,
+            photoshoot_type: res.data.photoshoot_type,
+            location: res.data.location,
             address: res.data.address,
-            special_requests: state.specrec,
-            appointment_date: state.appDate
+            special_requests: res.data.specrec,
+            appointment_date: res.data.appointment_date,
+            appointment_id: res.data.appointment_id
             //if updating, use default appid. otherwise, make one
           };
         });
