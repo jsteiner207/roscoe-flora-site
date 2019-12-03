@@ -38,6 +38,7 @@ export default function FormDialog(props) {
     location: "in-studio",
     address: [],
     adder: "",
+    appointment_id: "",
     appointment_date: new Date()
   });
 
@@ -47,6 +48,14 @@ export default function FormDialog(props) {
     setState({ ...state, manips: state.address.length });
   };
 
+  const generateKey = length => {
+    let appId = "";
+    let possible = "abcdefghijklmnopqrstuvwxyz0123456789";
+    for (let i = 0; i < length; i++) {
+      appId += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return appId;
+  };
   const addItem = () => {
     if (state.address.length <= 3) {
       if (state.adder !== "")
@@ -71,11 +80,13 @@ export default function FormDialog(props) {
     }
   };
 
-  const handleClickOpen = () => {
-    if (state.address.length === 0) {
-      setState({ ...state, address: ["207 England Dr, O'Fallon MO"] });
-    }
-    axios.post(`https://vast-wave-57983.herokuapp.com/api/items/`, state);
+  const handleClickOpen = async () => {
+    //setState({ ...state, appointment_id: generateKey(6) });
+    console.log(state);
+    axios.post(`https://vast-wave-57983.herokuapp.com/api/items/`, {
+      ...state,
+      appointment_id: generateKey(6)
+    });
     props.handleClose();
     setOpen(true); //this is for the snackbar
   };
