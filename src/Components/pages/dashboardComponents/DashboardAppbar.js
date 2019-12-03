@@ -18,6 +18,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import PasswordDialog from "./PasswordDialog";
+import AccountDialog from "./AccountDialog";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -41,6 +42,7 @@ export default function MenuAppBar(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [edit, setEdit] = React.useState(false);
+  const [add, setAdd] = React.useState(false);
   const open = Boolean(anchorEl);
   const [state, setState] = React.useState({
     top: false
@@ -49,12 +51,16 @@ export default function MenuAppBar(props) {
   const handleClose = () => {
     setAnchorEl(null);
     setEdit(false);
+    setAdd(false);
   };
 
   const editHandleClick = item => {
     setEdit(true);
   };
 
+  const addHandleClick = item => {
+    setAdd(true);
+  };
   // this is used to toggle the drawer open and close
   const toggleDrawer = (side, open) => event => {
     if (
@@ -177,7 +183,7 @@ export default function MenuAppBar(props) {
               onClose={handleClose}
             >
               <MenuItem onClick={editHandleClick}>change password</MenuItem>
-              <MenuItem onClick={handleClose}>Add account</MenuItem>
+              <MenuItem onClick={addHandleClick}>Add account</MenuItem>
             </Menu>
           </div>
         </Toolbar>
@@ -186,6 +192,7 @@ export default function MenuAppBar(props) {
         {sideList("left")}
       </Drawer>
       <PasswordDialog handleClose={handleClose} open={edit} />
+      <AccountDialog handleClose={handleClose} open={add} />
     </div>
   );
 }

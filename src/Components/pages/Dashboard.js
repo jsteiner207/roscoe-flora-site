@@ -24,6 +24,7 @@ import AccountForm from "./dashboardComponents/AccountsForm";
 import Pricing from "./dashboardComponents/Pricing";
 import Divider from "@material-ui/core/Divider";
 import TabSystem from "./dashboardComponents/web pages/TabSystem";
+import Portfolio from "./dashboardComponents/web pages/Porfolio";
 
 // import AddAppointment from "./dashboardComponents/AddAppointment";
 
@@ -103,7 +104,8 @@ export default function Dashboard() {
   const [edit, setEdit] = React.useState(false);
   const [add, setAdd] = React.useState(false);
   const [data, setData] = useState([]);
-  const [bookedDates, setBookedDates] = React.useState(null);
+  const [data2, setData2] = useState([]);
+  const [bookedDates, setBookedDates] = React.useState([]);
   const [appointment, setAppointment] = React.useState({ n: null });
 
   const todaysDate = new Date();
@@ -117,11 +119,23 @@ export default function Dashboard() {
     setAppointment(item);
     setDelete(true);
   };
+
+  const disableWeekends = date => {
+    let blocked = false;
+    bookedDates.map(apps => {
+      if (apps.getDate() === date.getDate())
+        if (apps.getMonth() === date.getMonth()) blocked = true;
+    });
+    return blocked; //props.bookedDates.includes(date) //|| date.getDay() === 0 || date.getDay() === 6;
+  };
+
   const handleClose = () => {
+    let daddy = {};
     setDelete(false);
     setEdit(false);
     setAdd(false);
     setConfirm(false);
+    setData2([...data2, daddy]);
   };
   const mlist = [
     "January",
@@ -157,7 +171,7 @@ export default function Dashboard() {
       .then(res => {
         console.log(res);
         console.log(res.data);
-        setData([...data, daddy]);
+        setData2([...data, daddy]);
       })
       .catch(err => console.log(err));
   };
@@ -167,9 +181,10 @@ export default function Dashboard() {
   useEffect(() => {
     axios.get("https://vast-wave-57983.herokuapp.com/api/items").then(res => {
       setData(res.data);
+      setData2(res.data);
       setBookedDates(res.data.map(item => new Date(item.appointment_date))); //gets the dates
     });
-  }, [data.length]);
+  }, [data2.length]);
 
   if (page === "Appointments")
     return (
@@ -188,6 +203,8 @@ export default function Dashboard() {
             align="center"
           >
             <DatePicker
+              shouldDisableDate={disableWeekends}
+              minDate={new Date()}
               className={classes.picker}
               align="center"
               autoOk
@@ -204,9 +221,7 @@ export default function Dashboard() {
             block
           </Button>
         </div>
-
         <Divider />
-
         {data &&
           data.map(item => (
             <div key={item._id} style={{ display: "inline-block" }}>
@@ -294,7 +309,11 @@ export default function Dashboard() {
           handleClose={handleClose}
           appointment={appointment}
         />
-        <AddAppointment open={add} handleClose={handleClose} />
+        <AddAppointment
+          open={add}
+          blockedDates={disableWeekends}
+          handleClose={handleClose}
+        />
       </div>
     );
   else if (page === "Customers") {
@@ -331,7 +350,7 @@ export default function Dashboard() {
     return (
       <div className={classes.div}>
         <DashboardAppbar page={page} setPage={setPage} />
-        <TabSystem />
+        <Portfolio />
       </div>
     );
   }

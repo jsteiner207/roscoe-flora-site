@@ -14,12 +14,16 @@ export default function Portfolio() {
   var files = [];
 
   const deleteImage = index => {
+    let updater = { updated: "yup" };
     axios
-      .post("https://vast-wave-57983.herokuapp.com/api/images/delete", { pub_id: pubid[index] })
+      .post("https://vast-wave-57983.herokuapp.com/api/images/delete", {
+        pub_id: pubid[index]
+      })
       .then(res => {
         console.log(res);
       })
       .catch(err => console.log(err));
+    setPhotos([...photos, updater]);
   };
 
   const uploadImage = async e => {
@@ -30,6 +34,7 @@ export default function Portfolio() {
   };
 
   const storeImage = async () => {
+    let updater = { updated: "yup" };
     const data = new FormData();
     data.append("file", info[0]);
     data.append("upload_preset", "darwin");
@@ -54,6 +59,8 @@ export default function Portfolio() {
       .post("https://vast-wave-57983.herokuapp.com/api/images", clouddata)
       .then(res => console.log(res.data))
       .catch(err => console.log(err));
+
+    setPhotos([...photos, updater]);
   };
 
   useEffect(() => {
@@ -61,7 +68,7 @@ export default function Portfolio() {
       setPhotos(res.data.map(photo => photo.img_url));
       setPubid(res.data.map(photo => photo.pub_id));
     });
-  }, []);
+  }, [photos.length]);
 
   return (
     <div>

@@ -256,18 +256,17 @@ export default function FormDialog(props) {
                 format="MM/dd/yyyy"
                 margin="normal"
                 id="date-picker-inline"
-                label="Date picker inline"
+                label="Appointment Date"
                 value={state.appointment_date}
                 onChange={handleDateChange}
                 KeyboardButtonProps={{
                   "aria-label": "change date"
                 }}
               />
-
               <KeyboardTimePicker
                 margin="normal"
                 id="time-picker"
-                label="Time picker"
+                label="Appointment Time"
                 value={state.appointment_date}
                 onChange={handleDateChange}
                 KeyboardButtonProps={{

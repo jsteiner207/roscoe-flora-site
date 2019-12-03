@@ -239,6 +239,7 @@ export default class UserForm extends Component {
       }); //gets the dates
     });
 
+    // cycles between steps
     switch (step) {
       case 1:
         return (
