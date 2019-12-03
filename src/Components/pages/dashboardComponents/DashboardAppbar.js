@@ -90,8 +90,7 @@ export default function MenuAppBar(props) {
           "Customers",
           "Pricing",
           "Contact messages",
-          "Website Editor",
-          "admin accounts"
+          "Website Editor"
         ].map((text, index) => (
           <ListItem button key={text} onClick={() => logText(text)}>
             <ListItemIcon>
