@@ -30,7 +30,7 @@ export default class UserForm extends Component {
     email: "",
     phone: "",
     specrec: "",
-    appDate: new Date("2019-11-25T21:11:54")
+    appDate: new Date()
   };
 
   onCancel = async () => {
@@ -240,7 +240,7 @@ export default class UserForm extends Component {
     });
 
     switch (step) {
-      case 1:
+      case 2:
         return (
           <MuiThemeProvider theme={this.theme}>
             <Reschedule
@@ -259,7 +259,7 @@ export default class UserForm extends Component {
             />
           </MuiThemeProvider>
         );
-      case 2:
+      case 1:
         return (
           <MuiThemeProvider theme={this.theme}>
             <FormPersonalDetails

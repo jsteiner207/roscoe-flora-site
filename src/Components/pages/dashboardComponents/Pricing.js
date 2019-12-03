@@ -40,6 +40,8 @@ const useStyles = makeStyles(theme => ({
 
 export default function Pricing() {
   const classes = useStyles();
+
+  // fixed an issue
   const [state, setState] = React.useState({
     headshot: 0,
     portraiture: 0,

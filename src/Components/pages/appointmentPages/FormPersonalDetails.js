@@ -24,6 +24,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import axios from "axios";
 
+//used to style the page
 const styles = {
   Selector: {
     minWidth: 150,
@@ -37,6 +38,9 @@ const styles = {
   location: {
     minWidth: 340,
     bottom: 30
+  },
+  list: {
+    margin: "auto"
   },
   estimate: {
     bottom: 98,
@@ -146,12 +150,14 @@ class FormPersonalDetails extends Component {
       values.location === "in-studio"
         ? this.state.prices.instudio
         : values.location === "out-of-studio"
-        ? values.address.length <= this.state.prices.freelocation
-          ? this.state.prices.outstudio
-          : (values.address.length - this.state.prices.freelocation) *
-              this.state.prices.location +
-            this.state.prices.outstudio
+        ? this.state.prices.outstudio
         : 0;
+
+    var addedLocs =
+      values.address.length <= this.state.prices.freelocation
+        ? 0
+        : (values.address.length - this.state.prices.freelocation) *
+          this.state.prices.location;
 
     return (
       <MuiThemeProvider>
@@ -247,9 +253,9 @@ class FormPersonalDetails extends Component {
                 <FormHelperText error>{this.state.emptyLoc}</FormHelperText>
               </FormControl>
             </Grid>
-
-            <List dense={true}>
-              {values.address &&
+            <List className={classes.list} container dense={true}>
+              {values.location !== "in-studio" ? (
+                values.address &&
                 values.address.map((address, i) => (
                   <ListItem>
                     <ListItemText primary={address} />
@@ -262,9 +268,11 @@ class FormPersonalDetails extends Component {
                       </IconButton>
                     </ListItemSecondaryAction>
                   </ListItem>
-                ))}
+                ))
+              ) : (
+                <React.Fragment></React.Fragment>
+              )}
             </List>
-
             <Grid item xs={12}>
               <FormControl
                 className={classes.location}
@@ -354,7 +362,9 @@ class FormPersonalDetails extends Component {
               className={classes.estimate}
               margin="normal"
               value={
-                "$" + (locationPrice + changesPrice + servicePrice) + ".00"
+                "$" +
+                (locationPrice + changesPrice + servicePrice + addedLocs) +
+                ".00"
               }
             />
             <TextField

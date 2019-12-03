@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -8,9 +10,18 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
 import UpdateSnack from "./updatesnack";
 import DateFnsUtils from "@date-io/date-fns";
 import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import InputLabel from "@material-ui/core/InputLabel";
+import Input from "@material-ui/core/Input";
+import FormHelperText from "@material-ui/core/FormHelperText";
 
 import {
   MuiPickersUtilsProvider,
@@ -24,14 +35,31 @@ export default function FormDialog(props) {
   const [open, setOpen] = React.useState(false);
   const [state, setState] = React.useState({
     first_name: "",
-    last_name: ""
+    last_name: "",
+    address: []
   });
 
   // updates the state after the component is rendered so the state isn't blank
   useEffect(() => {
-    setState(props.appointment);
-    console.log(props.bookedDates);
+    setState({ ...props.appointment, adder: "" });
   }, [props.appointment]);
+
+  const removeAddress = index => {
+    state.address.splice(index, 1);
+    console.log(state.address);
+    setState({ ...state, manips: state.address.length });
+  };
+
+  const addItem = () => {
+    if (state.address.length <= 3) {
+      if (state.adder !== "")
+        setState({
+          ...state,
+          address: [...state.address, state.adder],
+          adder: ""
+        }); //simple value
+    }
+  };
 
   const handleChange = name => event => {
     setState({ ...state, [name]: event.target.value });
@@ -75,6 +103,17 @@ export default function FormDialog(props) {
       flexWrap: "wrap"
     },
     textField: {
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(1),
+      width: 200
+    },
+    list: {
+      margin: "auto",
+      width: 260,
+      right: 40
+    },
+    service: {
+      bottom: 16,
       marginLeft: theme.spacing(1),
       marginRight: theme.spacing(1),
       width: 200
@@ -138,20 +177,26 @@ export default function FormDialog(props) {
               <MenuItem value={"in-studio"}>in-studio</MenuItem>
               <MenuItem value={"out-of-studio"}>out-of-studio</MenuItem>
             </TextField>
+            <List className={classes.list} container dense={true}>
+              {state.location !== "in-studio" ? (
+                state.address &&
+                state.address.map((address, i) => (
+                  <ListItem>
+                    <ListItemText primary={address} />
+                    <ListItemSecondaryAction>
+                      <IconButton onClick={() => removeAddress(i)} edge="end">
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))
+              ) : (
+                <React.Fragment></React.Fragment>
+              )}
+            </List>
+
             <TextField
-              value={
-                state.location === "in-studio"
-                  ? "207 England Dr, O'Fallon MO"
-                  : state.address
-              }
-              disabled={state.location === "in-studio" ? true : false}
-              className={classes.textField}
-              label="Address"
-              margin="normal"
-              onChange={handleChange("address")}
-            />
-            <TextField
-              className={classes.textField}
+              className={classes.service}
               label="Service"
               select
               margin="normal"
@@ -162,6 +207,31 @@ export default function FormDialog(props) {
               <MenuItem value={"headshot"}>headshot</MenuItem>
               <MenuItem value={"portraiture"}>portraiture</MenuItem>
             </TextField>
+            <FormControl>
+              <InputLabel htmlFor="standard-adornment-password">
+                Photoshoot Address(s)
+              </InputLabel>
+              <Input
+                value={
+                  state.location === "in-studio"
+                    ? "207 England Dr, O'Fallon MO"
+                    : state.adder
+                }
+                disabled={state.location === "in-studio" ? true : false}
+                onChange={handleChange("adder")}
+                id="standard-adornment-password"
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={addItem}
+                      disabled={state.location === "in-studio" ? true : false}
+                    >
+                      <AddCircleOutlineIcon />
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
             <TextField
               id="outlined-basic"
               className={classes.textField}
