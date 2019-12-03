@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import MUIDataTable from "mui-datatables";
 import { CircularProgress, Typography } from '@material-ui/core';
+import moment from "moment";
 //import { fullBlack } from "material-ui/styles/colors";
 
 class Example extends React.Component {
@@ -118,18 +119,25 @@ class Example extends React.Component {
        }
       },{
         name: "date_scheduled",
-        label: "Last Appointment",
+        label: "Initail Contact Date", //think of a cleaver word here
         options: {
          filter: true,
          sort: true,
+         
+         customBodyRender: (value, tableMeta, updateValue) => {
+
+          var x = moment(value).format('MMMM Do YYYY, h:mm')
+
+          return (x);
         }
+      }
        },
      ];    var { data, page, count, isLoading } = this.state;
 
     const options = {
       
       filterType: 'checkbox',
-      
+      selectableRows: 'none',
       filter: true,
       filterType: 'dropdown',
       responsive: 'scrollMaxHeight',

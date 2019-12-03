@@ -29,12 +29,12 @@ const StyledTableRow = withStyles(theme => ({
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: "50%",
+    width: "auto",
     marginTop: theme.spacing(3),
-    overflowX: "auto"
+    overflowX: ""
   },
   table: {
-    minWidth: 700
+    minWidth: "90%"
   }
 }));
 
@@ -73,7 +73,7 @@ export default function Pricing() {
       <Table className={classes.table} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell>Field</StyledTableCell>
+            <StyledTableCell>Cost Type</StyledTableCell>
             <StyledTableCell>Price</StyledTableCell>
             <StyledTableCell>Amount Free</StyledTableCell>
           </TableRow>

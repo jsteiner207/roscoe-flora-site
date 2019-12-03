@@ -9,6 +9,12 @@ import { createMuiTheme } from "@material-ui/core/styles";
 import axios from "axios";
 import red from "@material-ui/core/colors/red";
 import { orange } from "@material-ui/core/colors";
+import moment from "moment";
+import { formatRelativeWithOptions } from "date-fns/esm/fp";
+
+
+
+
 
 export default class UserForm extends Component {
   state = {
@@ -30,7 +36,8 @@ export default class UserForm extends Component {
     email: "",
     phone: "",
     specrec: "",
-    appDate: new Date()
+    appDate: new Date(),
+    dateErr :"",
   };
 
   onCancel = async () => {
@@ -46,9 +53,10 @@ export default class UserForm extends Component {
           address: res.data.address,
           specrec: res.data.special_requests,
           doc_id: res.data._id
+          
         });
       });
-
+     // if (this.state.appDate )
     let data = { email_name: this.state.email };
 
     axios
@@ -63,16 +71,32 @@ export default class UserForm extends Component {
       .catch(err => {
         console.log(err);
       });
-
-    axios
+      
+        var now = moment()
+        var exp = moment(this.state.appDate)
+        var days = exp.diff(now, 'days')
+        var months = exp.diff(now, 'months')
+        //var years = exp.diff(now, 'years', true) //float number
+        
+       // console.log(now,exp,days, months, years)
+        if (!months && !days){
+          this.setState = {dateEr: "Appointment Can't be canceled within 24 hours, please call us at 314-555-4444"}
+          
+        }
+        else 
+        {
+          this.setState = {dateEr: ""}
+        
+      
+     axios
       .delete(
         `https://vast-wave-57983.herokuapp.com/api/items/${this.state.doc_id}`
       )
       .then(console.log("success"))
-      .catch(err => console.log(err));
+      .catch(err => console.log(err)); 
 
     this.setState({ status: 3, step: 4 });
-  };
+  }};
 
   onRetrieve = () => {
     console.log(this.state.Appid);
@@ -99,6 +123,7 @@ export default class UserForm extends Component {
     console.log(this.state.appDate);
     this.render();
     this.handleDateChange(this.state.appDate);
+
     this.setState({ status: 2 });
   };
 
@@ -106,8 +131,10 @@ export default class UserForm extends Component {
     try {
       this.setState({ appDate: date });
       console.log(this.state.appDate);
+      
     } catch {
       console.log("d");
+      
     }
   };
 
@@ -285,7 +312,9 @@ export default class UserForm extends Component {
               onCancel={this.onCancel}
               values={values}
             />
-
+            <div style={{ fontSize: 12, color: "red" }}>
+            {this.state.dateErr}
+          </div>
             <FormUserDetails
               bookedDates={this.state.bookedDates}
               nextStep={this.nextStep}
