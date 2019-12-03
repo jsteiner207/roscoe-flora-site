@@ -13,20 +13,26 @@ import axios from "axios";
 // } from '@fortawesome/free-brands-svg-icons'
 import SocialMedia from "../SocialMedia";
 
+const initState ={
+  name: "",
+  email: "",
+  message: "",
+  disabled: false,
+  emailSent: null,
+  visible: false,
+  nameErr: "",
+  emailErr: "",
+  messageErr: ""
+
+}
+
 class Contact extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      name: "",
-      email: "",
-      message: "",
-      disabled: false,
-      emailSent: null,
-      visible: false
-    };
+    this.state = initState;
   }
 
-  onDismiss = () => this.setState({ visible: false });
+  onDismiss = () => this.setState(initState);
 
   handleChange = event => {
     const target = event.target;
@@ -37,17 +43,35 @@ class Contact extends React.Component {
     });
   };
 
-  // storeContact = () => {
+  validate = () => {
+    let nameErr = "";
+    let emailErr = "";
+    let messageErr = "";
 
-  // };
+    if (!this.state.name) {
+      nameErr = "Name cannot be blank";
+    }
+
+    if (!this.state.email.includes("@")) {
+      emailErr = "Invalid email";
+    }
+
+    if (this.state.message.length < 5){
+      messageErr = "Your message needs to be a bit bigger"
+    }
+    if (emailErr || nameErr||messageErr) {
+      this.setState({ emailErr, nameErr,messageErr });
+      return false;
+    }
+
+    return true;
+  };
 
   handleSubmit = event => {
     event.preventDefault();
-
-    this.setState({
-      visible: true,
-      disabled: true
-    });
+    const isValid = this.validate();
+    if (isValid) {
+    
 
     let data = {
       full_name: this.state.name,
@@ -58,7 +82,12 @@ class Contact extends React.Component {
     axios
       .post("https://vast-wave-57983.herokuapp.com/api/contacts", data)
       .then(res => console.log(res.data));
-  };
+      this.setState(initState)
+      this.setState({
+        visible: true,
+        disabled: true
+      });
+  }};
 
   // cyclically flushes out the dom
   render() {
@@ -71,7 +100,7 @@ class Contact extends React.Component {
         </Alert>
         <h1>Contact Us</h1>
         <p style={{ fontSize: 14 }}>email: mickeyzacom@gmail.com</p>
-        <p style={{ fontSize: 14 }}>phone: 636-279-3432</p>
+        <p style={{ fontSize: 14 }}>phone: 555-444-3432</p>
 
         <Container>
           <Form onSubmit={this.handleSubmit}>
@@ -85,7 +114,9 @@ class Contact extends React.Component {
                 onChange={this.handleChange}
               />
             </Form.Group>
-
+            <div style={{ fontSize: 12, color: "red" }}>
+            {this.state.nameErr}
+          </div>
             <Form.Group>
               <Form.Label htmlFor="email">Email</Form.Label>
               <Form.Control
@@ -96,7 +127,9 @@ class Contact extends React.Component {
                 onChange={this.handleChange}
               />
             </Form.Group>
-
+            <div style={{ fontSize: 12, color: "red" }}>
+            {this.state.emailErr}
+          </div>
             <Form.Group>
               <Form.Label htmlFor="message">Message</Form.Label>
               <Form.Control
@@ -108,7 +141,9 @@ class Contact extends React.Component {
                 onChange={this.handleChange}
               />
             </Form.Group>
-
+            <div style={{ fontSize: 12, color: "red" }}>
+            {this.state.messageErr}
+          </div>
             <Button
               className="d-inline-block"
               variant="primary"

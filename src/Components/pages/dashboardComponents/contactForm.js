@@ -3,7 +3,7 @@ import axios from "axios";
 import MUIDataTable from "mui-datatables";
 import { CircularProgress, Typography } from '@material-ui/core';
 //import { fullBlack } from "material-ui/styles/colors";
-
+import moment from "moment";
 class Example extends React.Component {
 
   state = {
@@ -109,12 +109,28 @@ class Example extends React.Component {
         filter: true,
         sort: false,
        }
-      }
+      },
+      {
+        name: "date",
+        label: "Date",
+        options: {
+          
+         filter: true,
+         sort: true,
+         customBodyRender: (value, tableMeta, updateValue) => {
+
+          var x = moment(value).format('MMMM Do YYYY, h:mm')
+
+          return (x);
+        }
+       }}
+
      ];    var { data, page, count, isLoading } = this.state;
 
     const options = {
       filter: true,
-      filterType: 'checkbox',
+      filterType: 'textField',
+      selectableRows: 'none',
 
       
       responsive: 'scrollMaxHeight',

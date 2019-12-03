@@ -35,9 +35,8 @@ class reschedule extends Component {
         <Grid className={classes.Grid} container spacing={4}>
           <Grid item xs={12}>
             <p className={classes.p}>
-              If you have already made an appointment, enter the appointment id
-              you received in the email if you need to make changes, reschedule,
-              or cancel the appointment
+              If you have already made an appointment, please enter the appointment id
+              you received in the email if you need to changes, reschedule, or cancel the appointment
             </p>
           </Grid>
           <Grid item xs={12}>
@@ -45,14 +44,14 @@ class reschedule extends Component {
               label="appointment id"
               onChange={handleChange("Appid")}
             />
-          </Grid>
+            </Grid>
           <Grid item xs={6}>
             <Button
               color="secondary"
               variant="outlined"
               onClick={this.props.onCancel}
             >
-              Cancel appointment
+              Cancel Appointment
             </Button>
           </Grid>
 
@@ -62,7 +61,7 @@ class reschedule extends Component {
               variant="outlined"
               onClick={this.props.onRetrieve}
             >
-              reschedule appointment
+              Reschedule Appointment
             </Button>
           </Grid>
           <br />
