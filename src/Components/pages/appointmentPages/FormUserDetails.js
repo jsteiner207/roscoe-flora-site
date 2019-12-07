@@ -94,6 +94,11 @@ class FormUserDetails extends Component {
   continue = async e => {
     await this.setState({
       isError: false,
+      isErrorFirst: false,
+      isErrorLast: false,
+      isErrorEmail: false,
+      isErrorPhone: false,
+      isErrorDate: false,
       emptyFirst: "",
       emptysecond: "",
       emptyEmail: "",
@@ -103,35 +108,41 @@ class FormUserDetails extends Component {
     e.preventDefault();
     if (this.props.values.firstName === "") {
       this.setState({ emptyFirst: "First Name Required" });
-      this.setState({ isError: true });
+      this.setState({ isErrorFirst: true });
     }
     if (this.props.values.lastName === "") {
       this.setState({ emptysecond: "Last Name Required" });
-      this.setState({ isError: true });
+      this.setState({ isErrorLast: true });
     }
     if (this.props.values.lastName === "Blocked") {
       this.setState({ emptysecond: "Nice try :)" });
-      this.setState({ isError: true });
+      this.setState({ isErrorLast: true });
     }
     if (
       isNull(this.props.values.email.value) ||
       this.props.values.email.indexOf("@") === -1
     ) {
       this.setState({ emptyEmail: "Valid Email Required" });
-      this.setState({ isError: true });
+      this.setState({ isErrorEmail: true });
     }
     if (this.props.values.phone.replace(/[^0-9]/g, "").length != 10) {
       this.setState({ emptyPhone: "Valid Phone Number Required" });
-      this.setState({ isError: true });
+      this.setState({ isErrorPhone: true });
     }
     if (
       isNull(this.props.values.appDate.valueOf()) ||
       isNaN(this.props.values.appDate.valueOf())
     ) {
       this.setState({ emptyDate: "Invalid Date or Time" });
-      this.setState({ isError: true });
+      this.setState({ isErrorDate: true });
     }
-    if (!this.state.isError) {
+    if (
+      !this.state.isErrorFirst &&
+      !this.state.isErrorLast &&
+      !this.state.isErrorEmail &&
+      !this.state.isErrorPhone &&
+      !this.state.isErrorDate
+    ) {
       console.log(this.state.isError);
       this.props.nextStep();
     }
@@ -160,7 +171,7 @@ class FormUserDetails extends Component {
           <Grid item xs={6}>
             <TextField
               label="First Name"
-              error={this.state.isError}
+              error={this.state.isErrorFirst}
               helperText={this.state.emptyFirst}
               onChange={handleChange("firstName")}
               value={values.firstName}
@@ -169,7 +180,7 @@ class FormUserDetails extends Component {
           </Grid>
           <Grid item xs={6}>
             <TextField
-              error={this.state.isError}
+              error={this.state.isErrorLast}
               helperText={this.state.emptysecond}
               label="Last Name"
               onChange={handleChange("lastName")}
@@ -180,7 +191,7 @@ class FormUserDetails extends Component {
 
           <Grid item xs={6}>
             <TextField
-              error={this.state.isError}
+              error={this.state.isErrorEmail}
               helperText={this.state.emptyEmail}
               label="Email"
               type="email"
@@ -201,7 +212,7 @@ class FormUserDetails extends Component {
                 Phone Number
               </InputLabel>
               <Input
-                error={this.state.isError}
+                error={this.state.isErrorPhone}
                 value={values.phone}
                 onChange={handleChange("phone")}
                 id="formatted-text-mask-input"
@@ -215,7 +226,7 @@ class FormUserDetails extends Component {
             <Grid item xs={6}>
               <KeyboardDatePicker
                 helperText={this.state.emptyDate}
-                error={this.state.isError}
+                error={this.state.isErrorDate}
                 shouldDisableDate={disableWeekends}
                 minDate={new Date()}
                 className={classes.dates}
@@ -231,7 +242,7 @@ class FormUserDetails extends Component {
             <Grid item xs={6}>
               <KeyboardTimePicker
                 helperText={this.state.emptyDate}
-                error={this.state.isError}
+                error={this.state.isErrorDate}
                 className={classes.dates}
                 margin="normal"
                 id="time-picker"
@@ -257,7 +268,9 @@ class FormUserDetails extends Component {
           Continue
         </Button>
         <div>
-          <a href={PDF}>Help</a>
+          <a target="_blank" href={PDF}>
+            Help
+          </a>
         </div>
       </div>
     );

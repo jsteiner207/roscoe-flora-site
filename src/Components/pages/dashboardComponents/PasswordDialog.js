@@ -124,7 +124,7 @@ export default function FormDialog(props) {
             Cancel
           </Button>
           <Button onClick={handleClickOpen} color="primary">
-            Confrim
+            Confirm
           </Button>
         </DialogActions>
       </Dialog>

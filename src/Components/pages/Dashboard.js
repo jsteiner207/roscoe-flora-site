@@ -20,10 +20,11 @@ import ContactForm from "./dashboardComponents/contactForm";
 import CustomerTable from "./dashboardComponents/customerTable";
 import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
+import Grow from "@material-ui/core/Grow";
 import AccountForm from "./dashboardComponents/AccountsForm";
 import Pricing from "./dashboardComponents/Pricing";
 import Divider from "@material-ui/core/Divider";
-import TabSystem from "./dashboardComponents/web pages/TabSystem";
+//import TabSystem from "./dashboardComponents/web pages/TabSystem";
 import Portfolio from "./dashboardComponents/web pages/Porfolio";
 
 // import AddAppointment from "./dashboardComponents/AddAppointment";
@@ -223,65 +224,74 @@ export default function Dashboard() {
         </div>
         <Divider />
         {data &&
-          data.map(item => (
+          data.map((item, i) => (
             <div key={item._id} style={{ display: "inline-block" }}>
-              <Card
-                className={
-                  new Date(item.appointment_date) < todaysDate
-                    ? classes.Past
-                    : item.last_name === "Blocked"
-                    ? classes.Blocked
-                    : item.confirmed === "true"
-                    ? classes.Confirmed
-                    : classes.Card
-                }
+              <Grow
+                in={true}
+                style={{ transformOrigin: "0 0 0" }}
+                {...(true ? { timeout: 1400 } : {})}
               >
-                <CardContent>
-                  <Typography
-                    className={classes.title}
-                    color="textSecondary"
-                    gutterBottom
-                  >
-                    {item.first_name} {item.last_name}
-                  </Typography>
-                  <Typography variant="h5" component="h2">
-                    {mlist[new Date(item.appointment_date).getMonth()]},{" "}
-                    {new Date(item.appointment_date).getDate()}
-                  </Typography>
-                  <Typography className={classes.pos} color="textSecondary">
-                    {new Date(item.appointment_date).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit"
-                    })}
-                  </Typography>
-                  <Typography className={classes.pos} color="textSecondary">
-                    {item.location === "in-studio"
-                      ? item.location
-                      : item.address}
-                  </Typography>
-                  <Typography variant="body2" component="p">
-                    {item.photoshoot_type}
-                    <br />
-                    {item.last_name !== "Blocked"
-                      ? "Dress changes: " + item.outfit_changes
-                      : ""}
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button onClick={() => handleClickConfirm(item)} size="small">
-                    {item.confirmed !== "true" ? "confirm" : "unconfirm"}
-                  </Button>
-                  <IconButton
-                    className={classes.right}
-                    onClick={() => editHandleClick(item)}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton onClick={() => handleClickDelete(item._id)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </CardActions>
-              </Card>
+                <Card
+                  className={
+                    new Date(item.appointment_date) < todaysDate
+                      ? classes.Past
+                      : item.last_name === "Blocked"
+                      ? classes.Blocked
+                      : item.confirmed === "true"
+                      ? classes.Confirmed
+                      : classes.Card
+                  }
+                >
+                  <CardContent>
+                    <Typography
+                      className={classes.title}
+                      color="textSecondary"
+                      gutterBottom
+                    >
+                      {item.first_name} {item.last_name}
+                    </Typography>
+                    <Typography variant="h5" component="h2">
+                      {mlist[new Date(item.appointment_date).getMonth()]},{" "}
+                      {new Date(item.appointment_date).getDate()}
+                    </Typography>
+                    <Typography className={classes.pos} color="textSecondary">
+                      {new Date(item.appointment_date).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                      })}
+                    </Typography>
+                    <Typography className={classes.pos} color="textSecondary">
+                      {item.location === "in-studio"
+                        ? item.location
+                        : item.address}
+                    </Typography>
+                    <Typography variant="body2" component="p">
+                      {item.photoshoot_type}
+                      <br />
+                      {item.last_name !== "Blocked"
+                        ? "Dress changes: " + item.outfit_changes
+                        : ""}
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    <Button
+                      onClick={() => handleClickConfirm(item)}
+                      size="small"
+                    >
+                      {item.confirmed !== "true" ? "confirm" : "unconfirm"}
+                    </Button>
+                    <IconButton
+                      className={classes.right}
+                      onClick={() => editHandleClick(item)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton onClick={() => handleClickDelete(item._id)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </CardActions>
+                </Card>
+              </Grow>
             </div>
           ))}
         <Fab

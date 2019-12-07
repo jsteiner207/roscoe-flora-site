@@ -43,7 +43,7 @@ const styles = {
     margin: "auto"
   },
   estimate: {
-    bottom: 98,
+    bottom: 117,
     left: 250,
     maxHeight: 1,
     maxWidth: 170
@@ -59,6 +59,10 @@ class FormPersonalDetails extends Component {
     addresses: [],
     address: "",
     isError: false,
+    isErrorService: false,
+    isErrorLoc: false,
+    isErrorChanges: false,
+    isErrorAddress: false,
     emptyService: "",
     emptyLoc: "",
     emptyChanges: "",
@@ -89,6 +93,10 @@ class FormPersonalDetails extends Component {
     e.preventDefault();
     await this.setState({
       isError: false,
+      isErrorService: false,
+      isErrorLoc: false,
+      isErrorChanges: false,
+      isErrorAddress: false,
       emptyService: "",
       emptyLoc: "",
       emptyChanges: "",
@@ -98,24 +106,29 @@ class FormPersonalDetails extends Component {
     }
     if (this.props.values.service === "") {
       this.setState({ emptyService: "Please Select One" });
-      this.setState({ isError: true });
+      this.setState({ isErrorService: true });
     }
     if (this.props.values.location === "") {
       this.setState({ emptyLoc: "Please Select One" });
-      this.setState({ isError: true });
+      this.setState({ isErrorLoc: true });
     }
     if (this.props.values.changes === "") {
       this.setState({ emptyChanges: "Please Select One" });
-      this.setState({ isError: true });
+      this.setState({ isErrorChanges: true });
     }
     if (
       !(this.props.values.address.length >= 1) &&
       this.props.values.location !== "in-studio"
     ) {
       this.setState({ emptyAddress: "Please submit at least one Address" });
-      this.setState({ isError: true });
+      this.setState({ isErrorAddress: true });
     }
-    if (!this.state.isError) {
+    if (
+      !this.state.isErrorService &&
+      !this.state.isErrorLoc &&
+      !this.state.isErrorChanges &&
+      !this.state.isErrorAddress
+    ) {
       console.log(this.state.isError);
       this.props.nextStep();
     }
@@ -164,7 +177,10 @@ class FormPersonalDetails extends Component {
         <div>
           <Grid className={classes.Grid} container spacing={1}>
             <Grid item xs={12}>
-              <FormControl error={this.state.isError} component="fieldset">
+              <FormControl
+                error={this.state.isErrorService}
+                component="fieldset"
+              >
                 <FormLabel component="legend">
                   What type of photoshoot are you interested in{" "}
                 </FormLabel>
@@ -218,7 +234,11 @@ class FormPersonalDetails extends Component {
               </FormControl>
             </Grid>
             <Grid item xs={12}>
-              <FormControl error={this.state.isError} component="fieldset">
+              <FormControl
+                disabled={values.service === "headshot"}
+                error={this.state.isErrorLoc}
+                component="fieldset"
+              >
                 <FormLabel component="legend">
                   where would you like your photos taken
                 </FormLabel>
@@ -241,6 +261,7 @@ class FormPersonalDetails extends Component {
                     onChange={handleChange("location")}
                     control={
                       <Radio
+                        disableRipple={true}
                         checked={values.location === "out-of-studio"}
                         color="primary"
                         onChange={handleChange("location")}
@@ -276,7 +297,7 @@ class FormPersonalDetails extends Component {
             <Grid item xs={12}>
               <FormControl
                 className={classes.location}
-                error={this.state.isError}
+                error={this.state.isErrorAddress}
               >
                 <InputLabel htmlFor="standard-adornment-password">
                   Photoshoot Address(s) Max: 4
@@ -338,7 +359,7 @@ class FormPersonalDetails extends Component {
                   Dress changes
                 </InputLabel>
                 <Select
-                  error={this.state.isError}
+                  error={this.state.isErrorChanges}
                   open={this.state.open}
                   onClose={this.handleClose}
                   onOpen={this.handleOpen}
@@ -363,7 +384,9 @@ class FormPersonalDetails extends Component {
               margin="normal"
               value={
                 "$" +
-                (locationPrice + changesPrice + servicePrice + addedLocs) +
+                (values.service === "headshot"
+                  ? this.state.prices.headshot
+                  : locationPrice + changesPrice + servicePrice + addedLocs) +
                 ".00"
               }
             />

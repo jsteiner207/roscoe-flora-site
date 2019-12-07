@@ -149,7 +149,7 @@ export default function MenuAppBar(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography>logout</Typography>
+          <Typography>Logout</Typography>
           <Switch checked={signed} onChange={handleSignedChange} />
           <Typography variant="h6" className={classes.title}>
             {props.page}

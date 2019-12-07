@@ -55,7 +55,8 @@ export default function Pricing() {
   });
 
   const handleChange = name => event => {
-    setState({ ...state, [name]: event.target.value });
+    if (event.target.value >= 0)
+      setState({ ...state, [name]: event.target.value });
   };
 
   const updatePrices = () => {
@@ -153,12 +154,14 @@ export default function Pricing() {
               <input
                 onChange={handleChange("freechange")}
                 value={state.freechange}
+                type="number"
               />
             </StyledTableCell>
           </StyledTableRow>
           <StyledTableRow>
             <StyledTableCell>Locations</StyledTableCell>
             <StyledTableCell>
+              $
               <input
                 onChange={handleChange("location")}
                 type="number"
