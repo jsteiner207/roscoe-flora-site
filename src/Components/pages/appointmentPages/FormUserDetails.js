@@ -9,6 +9,7 @@ import Grid from "@material-ui/core/Grid";
 import Form from "react-bootstrap/Form";
 import Divider from "@material-ui/core/Divider";
 import axios from "axios";
+import moment from "moment";
 import PropTypes from "prop-types";
 import PDF from "./Creating_an_Appointment.pdf";
 import MaskedInput from "react-text-mask";
@@ -226,17 +227,23 @@ class FormUserDetails extends Component {
             <Grid item xs={6}>
               <KeyboardDatePicker
                 helperText={this.state.emptyDate}
-                error={this.state.isErrorDate}
+                error={this.state.isError}
                 shouldDisableDate={disableWeekends}
-                minDate={new Date()}
+                minDate={moment().add(2, "days")}
                 className={classes.dates}
                 // disableToolbar
+                variant="inline"
                 format="MM/dd/yyyy"
                 margin="normal"
                 id="date-picker-inline"
-                label="Date picker inline"
+                label="Date"
                 value={values.appDate}
                 onChange={handleDateChange}
+                initialFocusedDate={""}
+                //emptyLabel= "Click the Icon"
+                disablePast="true"
+                maxDate={moment().add(90, "days")}
+                invalidDateMessage="Invalid Date, please click the Icon"
               />
             </Grid>
             <Grid item xs={6}>

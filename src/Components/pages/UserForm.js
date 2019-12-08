@@ -32,7 +32,7 @@ export default class UserForm extends Component {
     email: "",
     phone: "",
     specrec: "",
-    appDate: new Date(),
+    appDate: "",
     dateErr: ""
   };
 
