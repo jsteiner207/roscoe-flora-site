@@ -43,12 +43,25 @@ export class Success extends Component {
             </React.Fragment>
           </MuiThemeProvider>
         );
+      case 4:
+        return (
+          <MuiThemeProvider>
+            <React.Fragment>
+              <h1>
+                You have less than 24 hours from your appointment, please use
+                call 636-279-5131 )
+              </h1>
+            </React.Fragment>
+          </MuiThemeProvider>
+        );
       default:
-        return (<MuiThemeProvider>
-          <React.Fragment>
-            <h1>An error has occured :( </h1>
-          </React.Fragment>
-        </MuiThemeProvider>)
+        return (
+          <MuiThemeProvider>
+            <React.Fragment>
+              <h1>An error has occured :( </h1>
+            </React.Fragment>
+          </MuiThemeProvider>
+        );
     }
   }
 }

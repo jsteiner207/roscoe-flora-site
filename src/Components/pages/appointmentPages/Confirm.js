@@ -72,7 +72,7 @@ class Confirm extends Component {
               <ListItem>
                 <ListItemText
                   primary="Estimated cost"
-                  secondary={"$" + (150 + 30 * values.changes) + ".00"}
+                  secondary={values.price}
                 />
               </ListItem>
             </List>

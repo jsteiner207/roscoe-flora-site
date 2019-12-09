@@ -5,7 +5,7 @@ import About from "./Components/pages/About";
 import Home from "./Components/pages/Home";
 import Header from "./Components/Header";
 // import Portfolio from "./Components/pages/Portfolio";
-import Uploader from "./Components/pages/uploader";
+//import Uploader from "./Components/pages/uploader";
 
 // import Appointment from "./Components/pages/appointment";
 import Contact from "./Components/pages/Contact";
@@ -28,19 +28,20 @@ function App() {
               <React.Fragment>
                 <Header />
                 <Home />
-                <div><SocialMedia/></div>
-                
+                <div>
+                  <SocialMedia />
+                </div>
               </React.Fragment>
             )}
           />
-           <Route
+          <Route
             exact
             path="/Services"
             render={props => (
               <React.Fragment>
                 <Header />
                 <Service />
-                <SocialMedia/>
+                <SocialMedia />
               </React.Fragment>
             )}
           />
@@ -50,7 +51,7 @@ function App() {
               <React.Fragment>
                 <Header />
                 <About />
-                <SocialMedia/>
+                <SocialMedia />
               </React.Fragment>
             )}
           />
@@ -64,7 +65,9 @@ function App() {
                 </div>
                 <hr class="between" />
                 <hr class="between" />
-                <div className="container" style={{ marginTop: '10' }}><SocialMedia/></div>
+                <div className="container" style={{ marginTop: "10" }}>
+                  <SocialMedia />
+                </div>
               </React.Fragment>
             )}
           />
@@ -84,7 +87,7 @@ function App() {
                 <Header />
                 {/* <Appointment/> */}
                 <UserForm />
-                <SocialMedia/>
+                <SocialMedia />
               </React.Fragment>
             )}
           />

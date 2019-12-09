@@ -6,9 +6,9 @@ import Button from "@material-ui/core/Button";
 import DateFnsUtils from "@date-io/date-fns";
 import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import Form from "react-bootstrap/Form";
+//import Form from "react-bootstrap/Form";
 import Divider from "@material-ui/core/Divider";
-import axios from "axios";
+//import axios from "axios";
 import moment from "moment";
 import PropTypes from "prop-types";
 import PDF from "./Creating_an_Appointment.pdf";
@@ -130,10 +130,15 @@ class FormUserDetails extends Component {
       this.setState({ emptyPhone: "Valid Phone Number Required" });
       this.setState({ isErrorPhone: true });
     }
-    if (
-      isNull(this.props.values.appDate.valueOf()) ||
-      isNaN(this.props.values.appDate.valueOf())
-    ) {
+    try {
+      if (
+        isNull(this.props.values.appDate.valueOf()) ||
+        isNaN(this.props.values.appDate.valueOf())
+      ) {
+        this.setState({ emptyDate: "Invalid Date or Time" });
+        this.setState({ isErrorDate: true });
+      }
+    } catch {
       this.setState({ emptyDate: "Invalid Date or Time" });
       this.setState({ isErrorDate: true });
     }
@@ -226,8 +231,9 @@ class FormUserDetails extends Component {
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Grid item xs={6}>
               <KeyboardDatePicker
+                autoOk
                 helperText={this.state.emptyDate}
-                error={this.state.isError}
+                error={this.state.isErrorDate}
                 shouldDisableDate={disableWeekends}
                 minDate={moment().add(2, "days")}
                 className={classes.dates}

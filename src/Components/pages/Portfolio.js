@@ -7,12 +7,11 @@ import axios from "axios";
 
 import React, { useEffect, useState, useCallback } from "react";
 
-import Gallery from "react-photo-gallery";
-import Carousel, { Modal, ModalGateway } from "react-images";
+// import Gallery from "react-photo-gallery";
+// import Carousel, { Modal, ModalGateway } from "react-images";
 //import { photos } from "./photos";
 
- function Portfolio() {
-   
+function Portfolio() {
   const AutoplaySlider = withAutoplay(AwesomeSlider);
   const [photos, setPhotos] = React.useState([null]);
   useEffect(() => {
@@ -22,13 +21,13 @@ import Carousel, { Modal, ModalGateway } from "react-images";
   }, []);
 
   const slider = (
-    <AutoplaySlider cssModule={styles}
+    <AutoplaySlider
+      cssModule={styles}
       play={true}
       cancelOnInteraction={false} // should stop playing on user interaction
       interval={6000}
       infinite={true}
-      className ="container-fluid" 
-      
+      className="container-fluid"
     >
       {photos && photos.map(photo => <div data-src={photo} />)}
     </AutoplaySlider>
@@ -36,8 +35,6 @@ import Carousel, { Modal, ModalGateway } from "react-images";
 
   return slider;
 }
-
-
 
 /* function Portfolio1() {
   

@@ -24,6 +24,7 @@ import Grow from "@material-ui/core/Grow";
 import AccountForm from "./dashboardComponents/AccountsForm";
 import Pricing from "./dashboardComponents/Pricing";
 import Divider from "@material-ui/core/Divider";
+
 //import TabSystem from "./dashboardComponents/web pages/TabSystem";
 import Portfolio from "./dashboardComponents/web pages/Porfolio";
 
@@ -48,7 +49,6 @@ const useStyles = makeStyles(theme => ({
     marginRight: 50,
     marginTop: 60
   },
-
   Confirmed: {
     borderRadius: 15,
     backgroundColor: "lightgreen",
@@ -229,7 +229,7 @@ export default function Dashboard() {
               <Grow
                 in={true}
                 style={{ transformOrigin: "0 0 0" }}
-                {...(true ? { timeout: 1400 } : {})}
+                {...(true ? { timeout: 1200 } : {})}
               >
                 <Card
                   className={
@@ -274,21 +274,46 @@ export default function Dashboard() {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button
-                      onClick={() => handleClickConfirm(item)}
-                      size="small"
-                    >
-                      {item.confirmed !== "true" ? "confirm" : "unconfirm"}
-                    </Button>
-                    <IconButton
-                      className={classes.right}
-                      onClick={() => editHandleClick(item)}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton onClick={() => handleClickDelete(item._id)}>
-                      <DeleteIcon />
-                    </IconButton>
+                    {item.last_name !== "Blocked" ? (
+                      <Button
+                        onClick={() => handleClickConfirm(item)}
+                        size="small"
+                      >
+                        {item.confirmed !== "true" ? "confirm" : "unconfirm"}
+                      </Button>
+                    ) : (
+                      ""
+                    )}
+                    {item.last_name !== "Blocked" ? (
+                      <IconButton
+                        className={classes.right}
+                        onClick={() => editHandleClick(item)}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    ) : (
+                      ""
+                    )}
+                    {item.last_name !== "Blocked" ? (
+                      <IconButton onClick={() => handleClickDelete(item._id)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    ) : (
+                      <Button
+                        variant="outlined"
+                        style={{ margin: "auto" }}
+                        onClick={() =>
+                          axios
+                            .delete(
+                              `https://vast-wave-57983.herokuapp.com/api/items/${item._id}`
+                            )
+                            .then(setData2([...data, { last_name: "daddy" }]))
+                            .catch(err => console.log(err))
+                        }
+                      >
+                        UnBlock
+                      </Button>
+                    )}
                   </CardActions>
                 </Card>
               </Grow>

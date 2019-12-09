@@ -89,7 +89,8 @@ class FormPersonalDetails extends Component {
   removeAddress = index => this.props.values.address.splice(index, 1);
 
   // This increments the steps opening up the previous form
-  continue = async e => {
+  continue = price => async e => {
+    console.log(price);
     e.preventDefault();
     await this.setState({
       isError: false,
@@ -130,7 +131,7 @@ class FormPersonalDetails extends Component {
       !this.state.isErrorAddress
     ) {
       console.log(this.state.isError);
-      this.props.nextStep();
+      this.props.nextStep(price);
     }
   };
   //this.props.nextStep();
@@ -359,6 +360,7 @@ class FormPersonalDetails extends Component {
                   Dress changes
                 </InputLabel>
                 <Select
+                  disabled={values.service === "headshot"}
                   error={this.state.isErrorChanges}
                   open={this.state.open}
                   onClose={this.handleClose}
@@ -410,7 +412,16 @@ class FormPersonalDetails extends Component {
               <Button
                 color="primary"
                 variant="contained"
-                onClick={this.continue}
+                onClick={this.continue(
+                  "$" +
+                    (values.service === "headshot"
+                      ? this.state.prices.headshot
+                      : locationPrice +
+                        changesPrice +
+                        servicePrice +
+                        addedLocs) +
+                    ".00"
+                )}
               >
                 Continue
               </Button>

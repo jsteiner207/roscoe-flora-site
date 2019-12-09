@@ -1,9 +1,9 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
-import MaterialButton from "@material-ui/core/Button";
+//import MaterialButton from "@material-ui/core/Button";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
-import { Alert, Row, Col } from "reactstrap";
+import { Alert } from "reactstrap";
 import axios from "axios";
 
 // import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
@@ -13,7 +13,7 @@ import axios from "axios";
 // } from '@fortawesome/free-brands-svg-icons'
 import SocialMedia from "../SocialMedia";
 
-const initState ={
+const initState = {
   name: "",
   email: "",
   message: "",
@@ -23,8 +23,7 @@ const initState ={
   nameErr: "",
   emailErr: "",
   messageErr: ""
-
-}
+};
 
 class Contact extends React.Component {
   constructor(props) {
@@ -56,11 +55,11 @@ class Contact extends React.Component {
       emailErr = "Invalid email";
     }
 
-    if (this.state.message.length < 5){
-      messageErr = "Your message needs to be a bit bigger"
+    if (this.state.message.length < 5) {
+      messageErr = "Your message needs to be a bit bigger";
     }
-    if (emailErr || nameErr||messageErr) {
-      this.setState({ emailErr, nameErr,messageErr });
+    if (emailErr || nameErr || messageErr) {
+      this.setState({ emailErr, nameErr, messageErr });
       return false;
     }
 
@@ -71,23 +70,22 @@ class Contact extends React.Component {
     event.preventDefault();
     const isValid = this.validate();
     if (isValid) {
-    
+      let data = {
+        full_name: this.state.name,
+        email: this.state.email,
+        message: this.state.message
+      };
 
-    let data = {
-      full_name: this.state.name,
-      email: this.state.email,
-      message: this.state.message
-    };
-
-    axios
-      .post("https://vast-wave-57983.herokuapp.com/api/contacts", data)
-      .then(res => console.log(res.data));
-      this.setState(initState)
+      axios
+        .post("https://vast-wave-57983.herokuapp.com/api/contacts", data)
+        .then(res => console.log(res.data));
+      this.setState(initState);
       this.setState({
         visible: true,
         disabled: true
       });
-  }};
+    }
+  };
 
   // cyclically flushes out the dom
   render() {
@@ -115,8 +113,8 @@ class Contact extends React.Component {
               />
             </Form.Group>
             <div style={{ fontSize: 12, color: "red" }}>
-            {this.state.nameErr}
-          </div>
+              {this.state.nameErr}
+            </div>
             <Form.Group>
               <Form.Label htmlFor="email">Email</Form.Label>
               <Form.Control
@@ -128,8 +126,8 @@ class Contact extends React.Component {
               />
             </Form.Group>
             <div style={{ fontSize: 12, color: "red" }}>
-            {this.state.emailErr}
-          </div>
+              {this.state.emailErr}
+            </div>
             <Form.Group>
               <Form.Label htmlFor="message">Message</Form.Label>
               <Form.Control
@@ -142,8 +140,8 @@ class Contact extends React.Component {
               />
             </Form.Group>
             <div style={{ fontSize: 12, color: "red" }}>
-            {this.state.messageErr}
-          </div>
+              {this.state.messageErr}
+            </div>
             <Button
               className="d-inline-block"
               variant="primary"

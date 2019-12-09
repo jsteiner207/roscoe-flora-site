@@ -14,12 +14,13 @@ import { formatRelativeWithOptions } from "date-fns/esm/fp";
 
 export default class UserForm extends Component {
   state = {
+    valid: true,
     maxedAddress: false,
     bookedDates: [new Date()],
     doc_id: "",
     step: 1,
     price: 0,
-    status: 1,
+    status: 1, //used to know which status screen to go to. E.G. Cancel, update,
     updating: false,
     Appid: "",
     service: "",
@@ -32,7 +33,8 @@ export default class UserForm extends Component {
     email: "",
     phone: "",
     specrec: "",
-    appDate: "",
+    appDate: null,
+    price: null,
     dateErr: ""
   };
 
@@ -42,84 +44,104 @@ export default class UserForm extends Component {
         `https://vast-wave-57983.herokuapp.com/api/items/${this.state.Appid}`
       )
       .then(res => {
-        console.log(res.data);
-        this.setState({
-          email: res.data.email_name,
-          phone: res.data.phone_number,
-          address: res.data.address,
-          specrec: res.data.special_requests,
-          doc_id: res.data._id
-        });
-      });
-    // if (this.state.appDate )
-    let data = { email_name: this.state.email };
-
-    axios
-      .post(`https://vast-wave-57983.herokuapp.com/email`, [
-        data,
-        { code: "delete" }
-      ])
-      .then(res => {
-        console.log(res);
-        console.log(res.data);
+        try {
+          this.setState({
+            changes: res.data.outfit_changes,
+            location: res.data.location,
+            service: res.data.photoshoot_type,
+            firstName: res.data.first_name,
+            lastName: res.data.last_name,
+            email: res.data.email_name,
+            phone: res.data.phone_number,
+            address: res.data.address,
+            valid: true,
+            doc_id: res.data._id,
+            specrec: res.data.special_requests,
+            appDate: new Date(res.data.appointment_date),
+            updating: true
+          });
+        } catch {
+          this.setState({ valid: false });
+        }
       })
-      .catch(err => {
-        console.log(err);
-      });
-
-    var now = moment();
-    var exp = moment(this.state.appDate);
-    var days = exp.diff(now, "days");
-    var months = exp.diff(now, "months");
-    //var years = exp.diff(now, 'years', true) //float number
-
-    // console.log(now,exp,days, months, years)
-    if (!months && !days) {
-      this.setState = {
-        dateEr:
-          "Appointment Can't be canceled within 24 hours, please call us at 314-555-4444"
+      .catch(console.log("yeeting"));
+    let difInDays = (this.state.appDate - new Date()) / (1000 * 3600 * 24);
+    if (difInDays <= 2) {
+      if (this.state.valid !== false) this.setState({ status: 4, step: 4 });
+    } else if (this.state.valid !== false) {
+      let data = {
+        first_name: this.state.firstName,
+        last_name: this.state.lastName,
+        email_name: this.state.email,
+        phone_number: this.state.phone,
+        outfit_changes: this.state.changes,
+        photoshoot_type: this.state.service,
+        location: this.state.location,
+        address:
+          this.state.location === "in-studio"
+            ? "207 England Dr, O'Fallon MO"
+            : this.state.address,
+        special_requests: this.state.specrec,
+        appointment_date: this.state.appDate,
+        appointment_id: this.state.updating
+          ? this.state.Appid
+          : this.generateKey(6) //if updating, use default appid. otherwise, make one
       };
-    } else {
-      this.setState = { dateEr: "" };
 
+      await axios
+        .post(`https://vast-wave-57983.herokuapp.com/email`, [
+          data,
+          { code: "delete" }
+        ])
+        .then(res => {
+          console.log(res);
+          console.log(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+
+      //if (this.state.valid) {
       axios
         .delete(
           `https://vast-wave-57983.herokuapp.com/api/items/${this.state.doc_id}`
         )
-        .then(console.log("success"))
+        .then(this.setState({ status: 3, step: 4 }))
         .catch(err => console.log(err));
-
-      this.setState({ status: 3, step: 4 });
     }
   };
+  // this.setState({ status: 3, step: 4 });
+  //};
 
   onRetrieve = () => {
-    console.log(this.state.Appid);
     axios
       .get(
         `https://vast-wave-57983.herokuapp.com/api/items/${this.state.Appid}`
       )
       .then(res => {
-        console.log(res.data);
-        this.setState({
-          changes: res.data.outfit_changes,
-          location: res.data.location,
-          service: res.data.photoshoot_type,
-          firstName: res.data.first_name,
-          lastName: res.data.last_name,
-          email: res.data.email_name,
-          phone: res.data.phone_number,
-          address: res.data.address,
-          specrec: res.data.special_requests,
-          appDate: new Date(res.data.appointment_date),
-          updating: true
-        });
-      });
-    console.log(this.state.appDate);
-    this.render();
+        try {
+          this.setState({
+            changes: res.data.outfit_changes,
+            location: res.data.location,
+            service: res.data.photoshoot_type,
+            firstName: res.data.first_name,
+            lastName: res.data.last_name,
+            email: res.data.email_name,
+            phone: res.data.phone_number,
+            address: res.data.address,
+            valid: true,
+            specrec: res.data.special_requests,
+            appDate: new Date(res.data.appointment_date),
+            updating: true
+          });
+        } catch {
+          this.setState({ valid: false });
+        }
+      })
+      .catch(console.log("yeeting"));
+    //this.render();
     this.handleDateChange(this.state.appDate);
-
-    this.setState({ status: 2 });
+    this.setState({ status: 2, valid: true });
   };
 
   handleDateChange = date => {
@@ -213,7 +235,8 @@ export default class UserForm extends Component {
   };
 
   // Proceed to next step
-  nextStep = () => {
+  nextStep = price => {
+    if (price !== null) this.setState({ price: price }); //console.log(price + "works");
     const { step } = this.state;
     this.setState({
       step: step + 1
@@ -250,9 +273,18 @@ export default class UserForm extends Component {
 
   // Handle fields change
   handleChange = input => e => {
+    console.log("s");
     if (e.target.value === "headshot")
-      this.setState({ [input]: e.target.value, location: "in-studio" });
-    else this.setState({ [input]: e.target.value });
+      this.setState({
+        [input]: e.target.value,
+        location: "in-studio",
+        changes: 0
+      });
+    else if (input === "firstName" || input === "lastName") {
+      let value = e.target.value;
+      value = value.replace(/[^A-Za-z]/gi, "");
+      this.setState({ [input]: value });
+    } else this.setState({ [input]: e.target.value });
   };
 
   render() {
@@ -260,6 +292,8 @@ export default class UserForm extends Component {
     const { bookedDates } = this.state;
 
     const {
+      price,
+      valid,
       firstName,
       lastName,
       email,
@@ -276,6 +310,8 @@ export default class UserForm extends Component {
     } = this.state;
     const values = {
       maxedAddress,
+      price,
+      valid,
       firstName,
       lastName,
       email,
@@ -304,6 +340,7 @@ export default class UserForm extends Component {
             <Reschedule
               handleChange={this.handleChange}
               onRetrieve={this.onRetrieve}
+              setter={this.setState}
               onCancel={this.onCancel}
               values={values}
             />

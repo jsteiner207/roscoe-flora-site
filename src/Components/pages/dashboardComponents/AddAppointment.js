@@ -110,6 +110,9 @@ export default function FormDialog(props) {
       width: 260,
       right: 40
     },
+    box: {
+      width: 600
+    },
     service: {
       bottom: 16,
       marginLeft: theme.spacing(1),
@@ -270,6 +273,19 @@ export default function FormDialog(props) {
                 }}
               />
             </MuiPickersUtilsProvider>
+            <TextField
+              className={classes.box}
+              value={state.special_requests}
+              onChange={handleChange("special_requests")}
+              //id="outlined-multiline-static"
+              //defaultValue={values.specrec}
+              //onChange={handleChange("specrec")}
+              label="Special requests"
+              multiline
+              rows="5"
+              margin="normal"
+              variant="outlined"
+            />
           </form>
         </DialogContent>
         <DialogActions>
