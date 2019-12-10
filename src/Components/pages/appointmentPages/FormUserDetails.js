@@ -11,7 +11,7 @@ import Divider from "@material-ui/core/Divider";
 //import axios from "axios";
 import moment from "moment";
 import PropTypes from "prop-types";
-import PDF from "./Creating_an_Appointment.pdf";
+import PDF from "./AppointmentHelp.pdf";
 import MaskedInput from "react-text-mask";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";

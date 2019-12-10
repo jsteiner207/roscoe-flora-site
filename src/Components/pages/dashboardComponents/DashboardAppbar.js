@@ -4,6 +4,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
+import PDF from "./UserGuide.pdf";
 import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import Switch from "@material-ui/core/Switch";
@@ -151,6 +152,11 @@ export default function MenuAppBar(props) {
           </IconButton>
           <Typography>Logout</Typography>
           <Switch checked={signed} onChange={handleSignedChange} />
+          <div>
+            <a target="_blank" href={PDF}>
+              Help
+            </a>
+          </div>
           <Typography variant="h6" className={classes.title}>
             {props.page}
           </Typography>
