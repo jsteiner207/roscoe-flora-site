@@ -72,8 +72,8 @@ export default function Service() {
         <strong>
           *Disclaimer: There is a ${state.location} surcharge for each location
           after {state.freelocation} location(s). There is also a $
-          {state.dresschanges} surcharge for each outfit change after{" "}
-          {state.freechange} outfit(s).
+          {state.dresschanges} surcharge for each dress change after{" "}
+          {state.freechange} dress change(s).
         </strong>
       </p>
     </div>

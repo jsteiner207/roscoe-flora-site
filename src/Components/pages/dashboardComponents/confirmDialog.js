@@ -24,8 +24,6 @@ export default function AppointmentDialog(props) {
 
   const handleClickOpen = () => {
     deleteCard();
-    setOpen(true);
-    props.handleClose();
   };
   const handleClose = () => {
     setOpen(false);
@@ -76,7 +74,10 @@ export default function AppointmentDialog(props) {
             confirmed: "true"
           }
         )
-        .then(console.log("success"))
+        .then(res => {
+          setOpen(true);
+          props.handleClose();
+        })
         .catch(err => console.log(err));
     } else {
       axios
@@ -86,7 +87,10 @@ export default function AppointmentDialog(props) {
             confirmed: "false"
           }
         )
-        .then(console.log("success"))
+        .then(res => {
+          setOpen(true);
+          props.handleClose();
+        })
         .catch(err => console.log(err));
     }
   };

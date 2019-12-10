@@ -5,6 +5,7 @@ import Divider from "@material-ui/core/Divider";
 import Input from "@material-ui/core/Input";
 
 export default function Portfolio() {
+  const [disabled, setDisabled] = React.useState(false);
   const [image, setImage] = useState("");
   const [id, setId] = React.useState("");
   const [photos, setPhotos] = React.useState([null]);
@@ -31,6 +32,7 @@ export default function Portfolio() {
     setImage(URL.createObjectURL(files[0]));
     console.log(files);
     setInfo(files);
+    setDisabled(false);
   };
 
   const storeImage = async () => {
@@ -57,7 +59,11 @@ export default function Portfolio() {
 
     axios
       .post("https://vast-wave-57983.herokuapp.com/api/images", clouddata)
-      .then(res => console.log(res.data))
+      .then(res => {
+        console.log(res.data);
+        setDisabled(true);
+        setPhotos([...photos, updater]);
+      })
       .catch(err => console.log(err));
 
     setPhotos([...photos, updater]);
@@ -85,7 +91,12 @@ export default function Portfolio() {
       <br />
       {image !== "" ? (
         <div style={{ padding: 10 }}>
-          <Button color="Primary" variant="outlined" onClick={storeImage}>
+          <Button
+            disabled={disabled}
+            color="Primary"
+            variant="outlined"
+            onClick={storeImage}
+          >
             click to store
           </Button>
         </div>

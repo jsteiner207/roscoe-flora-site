@@ -38,6 +38,14 @@ export default class UserForm extends Component {
     dateErr: ""
   };
 
+  componentWillMount(){
+    axios.get("https://vast-wave-57983.herokuapp.com/api/items").then(res => {
+      this.setState({
+        bookedDates: res.data.map(item => new Date(item.appointment_date))
+      }); //gets the dates
+    });
+  }
+
   onCancel = async () => {
     await axios
       .get(
@@ -326,11 +334,7 @@ export default class UserForm extends Component {
       Appid
     };
 
-    axios.get("https://vast-wave-57983.herokuapp.com/api/items").then(res => {
-      this.setState({
-        bookedDates: res.data.map(item => new Date(item.appointment_date))
-      }); //gets the dates
-    });
+    
 
     // cycles between steps
     switch (step) {
