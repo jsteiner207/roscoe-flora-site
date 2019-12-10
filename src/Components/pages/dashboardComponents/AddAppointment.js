@@ -104,6 +104,15 @@ export default function FormDialog(props) {
       });
       props.handleClose();
       setOpen(true); //this is for the snackba
+      setState({
+        first_name: "",
+        last_name: "",
+        location: "",
+        address: [null],
+        adder: "",
+        appointment_id: "",
+        appointment_date: null
+      });
     }
   };
 
