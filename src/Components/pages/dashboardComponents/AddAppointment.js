@@ -32,7 +32,12 @@ import {
 } from "@material-ui/pickers";
 export default function FormDialog(props) {
   const [open, setOpen] = React.useState(false);
+
   const [state, setState] = React.useState({
+    isErrorFirst: false,
+    firstMsg: "",
+    isErrorLast: false,
+    lastMsg: "",
     first_name: "",
     last_name: "",
     location: "in-studio",
@@ -82,13 +87,24 @@ export default function FormDialog(props) {
 
   const handleClickOpen = async () => {
     //setState({ ...state, appointment_id: generateKey(6) });
-    console.log(state);
-    axios.post(`https://vast-wave-57983.herokuapp.com/api/items/`, {
-      ...state,
-      appointment_id: generateKey(6)
-    });
-    props.handleClose();
-    setOpen(true); //this is for the snackbar
+    if (state.first_name === "") {
+      await setState({ isErrorFirst: true });
+      console.log(state.isErrorFirst);
+    }
+    if (state.last_name === "") {
+      await setState({ sErrorLast: true });
+      console.log(state.isErrorLast);
+    }
+    console.log(state.isErrorLast + state.isErrorFirst);
+    if (state.isErrorFirst === false && state.isErrorLast === false) {
+      console.log(state);
+      axios.post(`https://vast-wave-57983.herokuapp.com/api/items/`, {
+        ...state,
+        appointment_id: generateKey(6)
+      });
+      props.handleClose();
+      setOpen(true); //this is for the snackba
+    }
   };
 
   const handleClose = () => {
@@ -138,6 +154,8 @@ export default function FormDialog(props) {
 
           <form className={classes.container}>
             <TextField
+              error={state.isErrorFirst}
+              helperText={state.firstMsg}
               className={classes.textField}
               label="First Name"
               margin="normal"
@@ -145,6 +163,8 @@ export default function FormDialog(props) {
               onChange={handleChange("first_name")}
             />
             <TextField
+              error={state.isErrorLast}
+              helperText={state.lastMsg}
               className={classes.textField}
               label="Last Name"
               margin="normal"

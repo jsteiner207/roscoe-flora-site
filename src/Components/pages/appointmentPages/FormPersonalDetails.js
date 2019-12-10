@@ -313,6 +313,7 @@ class FormPersonalDetails extends Component {
                   disabled={values.location === "in-studio" ? true : false}
                   onChange={handleChange("adder")}
                   id="standard-adornment-password"
+                  placeholder="click add icon to store"
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton

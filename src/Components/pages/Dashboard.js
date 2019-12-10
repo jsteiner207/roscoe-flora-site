@@ -260,11 +260,21 @@ export default function Dashboard() {
                         minute: "2-digit"
                       })}
                     </Typography>
-                    <Typography className={classes.pos} color="textSecondary">
-                      {item.location === "in-studio"
-                        ? item.location
-                        : item.address}
-                    </Typography>
+
+                    {item.location === "in-studio" ? (
+                      <Typography className={classes.pos} color="textSecondary">
+                        {item.location}
+                      </Typography>
+                    ) : (
+                      item.address.map(add => (
+                        <Typography
+                          className={classes.pos}
+                          color="textSecondary"
+                        >
+                          {add}
+                        </Typography>
+                      ))
+                    )}
                     <Typography variant="body2" component="p">
                       {item.photoshoot_type}
                       <br />

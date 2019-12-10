@@ -41,7 +41,7 @@ const styles = {
     maxWidth: 200
   }
 };
-
+// does the phone number mask
 function TextMaskCustom(props) {
   const { inputRef, ...other } = props;
 
